@@ -1,0 +1,10 @@
+*.manifest
+*.tlog
+*.idb
+*.unsuccessfulbuild
+*.lastbuildstate
+*.res
+*.sdf
+*.ipch
+*.opensdf
+*.rc
