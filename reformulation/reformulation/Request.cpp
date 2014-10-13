@@ -92,3 +92,31 @@ float Request::getDistance2predicate(Request r)
 	}
 	return sqrt(sum/50.0f);
 }
+
+ostream& Request::output(ostream& os)
+{
+	for(int i=0;i<50;i++)
+	{
+		os<<this->subject[i]<<" "<<this->predicate[i]<<" "<<this->object[i]<<" ";
+	}
+	return os;
+}
+
+istream& Request::input(istream& is)
+{
+	for(int i=0;i<50;i++)
+	{
+		is>>this->subject[i]>>this->predicate[i]>>this->object[i];
+	}
+	return is;
+}
+
+ostream& operator<<(ostream& os,Request& req)
+{ 
+	return req.output(os);
+}
+
+istream& operator>>(istream& is,Request& req)
+{
+	return req.input(is);
+}
