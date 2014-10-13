@@ -30,6 +30,7 @@ private:
 	void parseClexLine(char* line);
 	void addQuotedWord(char* line);
 	void addNoQuotedWord(char* line);
+	void addWord(char* line);
 	map<string,Request> content;
 };
 

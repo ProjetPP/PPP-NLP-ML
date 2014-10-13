@@ -39,7 +39,7 @@ bool Dictionary::load(string file)
 	content.clear();
 	string s;
 	Request req;
-	int i;
+	int i=0;
 	while(is>>s>>req)
 	{
 		i++;
@@ -72,6 +72,13 @@ bool Dictionary::initializeFromClex(string clexfile)
 	content["VALUE3"]=Request();
 	
 	return true;
+}
+
+void Dictionary::addWord(char* line)
+{
+	if(line[1]=='\'')
+		addQuotedWord(line);
+	else addNoQuotedWord(line);
 }
 
 void Dictionary::addQuotedWord(char* line)
@@ -112,7 +119,5 @@ void Dictionary::parseClexLine(char* line)
 	}
 	if(nature=="pn_sg"||nature=="pn_pl"||nature=="pndef_sg"||nature=="pndef_pl")
 		return;//propers names are unsed in dictionary
-	if(nature=="mn_sg"||nature=="mn_pl")
-		addQuotedWord(line);//units are in VALUES tags
-	//...TODO : treat all cases
+	addWord(line);
 }
