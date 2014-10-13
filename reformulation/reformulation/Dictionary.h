@@ -19,7 +19,7 @@ public:
 	bool load(string file);
 	//First time you need to build the dictionnary 
 	// - using CLEX see : https://github.com/Attempto/Clex/blob/master/clex_lexicon.pl
-	void initializeFromClex(string clexfile);
+	bool initializeFromClex(string clexfile);
 	//Basic operation - function names are explicit
 	//TODO : Choose norm 1 or 2 -> norm 2 ?
 	Request operator[](string entry);
@@ -27,6 +27,9 @@ public:
 	string findnearestObject(Request req);
 	string findnearestPredicate(Request req);
 private:
+	void parseClexLine(char* line);
+	void addQuotedWord(char* line);
+	void addNoQuotedWord(char* line);
 	map<string,Request> content;
 };
 
