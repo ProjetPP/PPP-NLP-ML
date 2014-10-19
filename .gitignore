@@ -9,3 +9,7 @@
 *.opensdf
 *.rc
 reformulation/reformulation/dictionnary.txt
+*~
+clex*
+*.o
+reformulation

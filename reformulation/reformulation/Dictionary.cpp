@@ -2,7 +2,8 @@
 #include <fstream>
 
 
-Dictionary::Dictionary(void)
+Dictionary::Dictionary(void) :
+content(map<string,Request>())
 {
 }
 
@@ -27,7 +28,7 @@ bool Dictionary::save(string file)
 	cout<<"Dictionary saved"<<endl;
 	return true;
 }
-	
+
 bool Dictionary::load(string file)
 {
 	ifstream is(file);
@@ -70,7 +71,7 @@ bool Dictionary::initializeFromClex(string clexfile)
 	content["VALUE1"]=Request();
 	content["VALUE2"]=Request();
 	content["VALUE3"]=Request();
-	
+
 	return true;
 }
 
@@ -105,7 +106,7 @@ void Dictionary::addNoQuotedWord(char* line)
 	}
 	content[word]=Request();
 }
-	
+
 
 void Dictionary::parseClexLine(char* line)
 {
