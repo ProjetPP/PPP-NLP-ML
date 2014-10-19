@@ -1,5 +1,5 @@
 #include "Request.h"
-
+#include <cstdlib>
 
 Request::Request(void) :
 subject(vector<float>(50,0)), object(vector<float>(50,0)), predicate(vector<float>(50,0))
