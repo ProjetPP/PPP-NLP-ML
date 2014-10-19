@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include "definitions.h"
 
 using namespace std;
 
@@ -12,6 +13,8 @@ public:
 	Request(void);
 	//Request in invalide with this constructor
 	Request(int invalid);
+	//Maybe you have some data
+	Request(word subject,word predicte,word object);
 	~Request(void);
 	bool isValid() const __attribute__((pure));
 	//Distance operator using norm 1 or square of norm 2
@@ -25,10 +28,17 @@ public:
 	//operator to save and load
 	ostream& output(ostream& os);
 	istream& input(istream& is);
+	//Some getters
+	word getSubject();
+	word getObject();
+	word getPredicate();
+	word::iterator getSubjectIterator();
+	word::iterator getObjectIterator();
+	word::iterator getPredicateIterator();
 private:
-	vector<float> subject;
-	vector<float> object;
-	vector<float> predicate;
+	word subject;
+	word object;
+	word predicate;
 };
 
 ostream& operator<<(ostream& os,Request& req);

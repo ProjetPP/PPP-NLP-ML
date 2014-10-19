@@ -1,6 +1,7 @@
 #include "Dictionary.h"
 #include <fstream>
 #include <iostream>
+#include "definitions.h"
 
 
 Dictionary::Dictionary(void) :
@@ -16,7 +17,7 @@ Dictionary::~Dictionary(void)
 
 bool Dictionary::save(string file)
 {
-	ofstream os(file.c_str());
+	ofstream os(file);
 	if(os.fail())
 	{
 		cout<<"Could not save dictionary, file not openable"<<endl;
@@ -32,7 +33,7 @@ bool Dictionary::save(string file)
 
 bool Dictionary::load(string file)
 {
-	ifstream is(file.c_str());
+	ifstream is(file);
 	if(is.fail())
 	{
 		cout<<"Could not load dictionary, file not openable"<<endl;
@@ -54,7 +55,7 @@ bool Dictionary::load(string file)
 bool Dictionary::initializeFromClex(string clexfile)
 {
 	content.clear();
-	ifstream is(clexfile.c_str());
+	ifstream is(clexfile);
 	if(is.fail())
 	{
 		cout<<"clex file "<<clexfile<<" could not be opened"<<endl;
