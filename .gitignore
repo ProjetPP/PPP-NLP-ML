@@ -13,4 +13,4 @@ reformulation/reformulation/dictionnary.txt
 clex*
 *.o
 *.kdev4
-reformulation
+build

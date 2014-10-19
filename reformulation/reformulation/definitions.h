@@ -1,0 +1,12 @@
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
+
+#define WORDSIZE 50
+#define FUSIONSIZE 6*3*WORDSIZE*WORDSIZE
+#define COMPACTSIZE 3*WORDSIZE*WORDSIZE
+#define UNCOMPACTSIZE 3*WORDSIZE*WORDSIZE
+
+
+typedef std::vector<float> word;
+
+#endif
