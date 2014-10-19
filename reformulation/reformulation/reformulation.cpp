@@ -15,6 +15,8 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+    (void) argc;
+    (void) argv;
 	Dictionary dico;
 	//dico.initializeFromClex("clex_lexicon.pl");
 	//dico.save("dictionnary.txt");
