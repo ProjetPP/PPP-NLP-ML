@@ -6,11 +6,11 @@
 
 Functions::Functions(void)
 {
-  fusionMatrix=vector<float>(FUSIONSIZE);
+  mergeMatrix=vector<float>(MERGESIZE);
   compactMatrix=vector<float>(COMPACTSIZE);
   uncompactMatrix=vector<float>(UNCOMPACTSIZE);
-  for(int i=0;i<FUSIONSIZE;i++)
-    fusionMatrix[i]=((static_cast<float>(rand()%2000))/1000.0f-1.0f)/WORDSIZE;
+  for(int i=0;i<MERGESIZE;i++)
+    mergeMatrix[i]=((static_cast<float>(rand()%2000))/1000.0f-1.0f)/WORDSIZE;
   for(int i=0;i<COMPACTSIZE;i++)
     compactMatrix[i]=((static_cast<float>(rand()%2000))/1000.0f-1.0f)/WORDSIZE;
   for(int i=0;i<UNCOMPACTSIZE;i++)
@@ -32,8 +32,8 @@ bool Functions::load(string file)
     return false;
     
   }
-  for(int i=0;i<FUSIONSIZE;i++)
-    is>>fusionMatrix[i];
+  for(int i=0;i<MERGESIZE;i++)
+    is>>mergeMatrix[i];
   for(int i=0;i<COMPACTSIZE;i++)
     is>>compactMatrix[i];
   for(int i=0;i<UNCOMPACTSIZE;i++)
@@ -50,8 +50,8 @@ bool Functions::save(string file)
     cout<<"Functions paramters file "<<file<<" is not openable"<<endl;
     return false;
   }
-  for(int i=0;i<FUSIONSIZE;i++)
-    os<<fusionMatrix[i]<<" ";
+  for(int i=0;i<MERGESIZE;i++)
+    os<<mergeMatrix[i]<<" ";
   for(int i=0;i<COMPACTSIZE;i++)
     os<<compactMatrix[i]<<" ";
   for(int i=0;i<UNCOMPACTSIZE;i++)
@@ -111,12 +111,11 @@ void *launchMatrixVectorCalculus(void* data)
   return 0;
 }
 
-Request Functions::fusion(Request r1,Request r2)
+Request Functions::merge(Request r1,Request r2)
 {
-  //TODO Start :ad to compute all the stuff
   pthread_t tid[18];
   vectorMatrixData data[18];
-  vector<float>::iterator it=this->fusionMatrix.begin();
+  vector<float>::iterator it=this->mergeMatrix.begin();
   for(int i=0;i<18;i++)
   {
     data[i].blocMatrix=it;

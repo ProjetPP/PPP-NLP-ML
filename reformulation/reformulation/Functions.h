@@ -15,11 +15,11 @@ public:
 	~Functions(void);
 	bool load(string file);
 	bool save(string file);
-	Request fusion(Request r1,Request r2);
+	Request merge(Request r1,Request r2);
 	word compact(Request r);
 	Request uncompact(word w);
 private:
-	vector<float> fusionMatrix;
+	vector<float> mergeMatrix;
 	vector<float> compactMatrix;
 	vector<float> uncompactMatrix;
 };
