@@ -18,10 +18,18 @@ public:
 	Request merge(Request r1,Request r2);
 	word compact(Request r);
 	Request uncompact(word w);
+	void clearGradient();
+	void BackPropagationMerge(vector<float> input,Request gradOutput);
+	void BackPropagationCompact(vector<float> input,Request gradOutput);
+	void BackPropagationUncompact(vector<float> input,Request gradOutput);
 private:
 	vector<float> mergeMatrix;
 	vector<float> compactMatrix;
 	vector<float> uncompactMatrix;
+	
+	vector<float> gradInputMerge;
+	vector<float> gradInputCompact;
+	vector<float> gradInputUncompact;
 };
 
 struct vectorMatrixData
