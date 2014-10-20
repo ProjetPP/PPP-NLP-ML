@@ -16,6 +16,8 @@ public:
 	bool load(string file);
 	bool save(string file);
 	Request fusion(Request r1,Request r2);
+	word compact(Request r);
+	Request uncompact(word w);
 private:
 	vector<float> fusionMatrix;
 	vector<float> compactMatrix;

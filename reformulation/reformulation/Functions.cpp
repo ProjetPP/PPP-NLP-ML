@@ -7,8 +7,14 @@
 Functions::Functions(void)
 {
   fusionMatrix=vector<float>(FUSIONSIZE);
-  compactMatrix=vector<float>(3*WORDSIZE*WORDSIZE);
-  uncompactMatrix=vector<float>(3*WORDSIZE*WORDSIZE);
+  compactMatrix=vector<float>(COMPACTSIZE);
+  uncompactMatrix=vector<float>(UNCOMPACTSIZE);
+  for(int i=0;i<FUSIONSIZE;i++)
+    fusionMatrix[i]=((static_cast<float>(rand()%2000))/1000.0f-1.0f)/WORDSIZE;
+  for(int i=0;i<COMPACTSIZE;i++)
+    compactMatrix[i]=((static_cast<float>(rand()%2000))/1000.0f-1.0f)/WORDSIZE;
+  for(int i=0;i<UNCOMPACTSIZE;i++)
+    uncompactMatrix[i]=((static_cast<float>(rand()%2000))/1000.0f-1.0f)/WORDSIZE;
 }
 
 
@@ -139,11 +145,64 @@ Request Functions::fusion(Request r1,Request r2)
      pthread_create(&tid[i],NULL,launchMatrixVectorCalculus,&data[i]);
   }
   /// wait all threads
-  for (int i = 0; i < 2; i++) 
+  for (int i = 0; i < 18; i++) 
   {
     pthread_join(tid[i], NULL);  
   }
   return Request(data[0].result+data[1].result+data[2].result+data[3].result+data[4].result+data[5].result,
 		 data[6].result+data[7].result+data[8].result+data[9].result+data[10].result+data[11].result,
 		 data[12].result+data[13].result+data[14].result+data[15].result+data[16].result+data[17].result);
+}
+
+word Functions::compact(Request r)
+{
+  pthread_t tid[3];
+  vectorMatrixData data[3];
+  vector<float>::iterator it=this->compactMatrix.begin();
+  for(int i=0;i<3;i++)
+  {
+    data[i].blocMatrix=it;
+    it+=WORDSIZE*WORDSIZE;
+    switch(i)
+    {
+      case 0:
+	data[i].blocvector=r.getSubjectIterator();
+	break;
+      case 1:
+	data[i].blocvector=r.getPredicateIterator();
+	break;
+      case 2:
+	data[i].blocvector=r.getObjectIterator();
+	break;
+    }
+     pthread_create(&tid[i],NULL,launchMatrixVectorCalculus,&data[i]);
+  }
+  /// wait all threads
+  for (int i = 0; i < 3; i++) 
+  {
+    pthread_join(tid[i], NULL);  
+  }
+  
+  return data[0].result+data[1].result+data[2].result;
+}
+
+Request Functions::uncompact(word w)
+{
+  pthread_t tid[3];
+  vectorMatrixData data[3];
+  vector<float>::iterator it=this->uncompactMatrix.begin();
+  for(int i=0;i<3;i++)
+  {
+    data[i].blocMatrix=it;
+    it+=WORDSIZE*WORDSIZE;
+    data[i].blocvector=w.begin();
+    pthread_create(&tid[i],NULL,launchMatrixVectorCalculus,&data[i]);
+  }
+  /// wait all threads
+  for (int i = 0; i < 3; i++) 
+  {
+    pthread_join(tid[i], NULL);  
+  }
+  
+  return Request(data[0].result,data[1].result,data[2].result);
 }
