@@ -17,11 +17,23 @@ public:
 	bool save(string file);
 	Request fusion(Request r1,Request r2);
 private:
-	vector<int> fusionMatrix;
-	vector<int> compactMatrix;
-	vector<int> uncompactMatrix;
+	vector<float> fusionMatrix;
+	vector<float> compactMatrix;
+	vector<float> uncompactMatrix;
 };
 
-word computeMatrixVectorBlocAndUnlockMutex(word::iterator blocMatrix,word::iterator blocvector,pthread_mutex_t * mutex);
+struct vectorMatrixData
+{
+  word::iterator blocMatrix;
+  word::iterator blocvector;
+  word result;
+};
+
+word& operator+=(word& w1,word w2);
+word operator+(word w1,word w2);
+
+word computeMatrixVectorBloc(word::iterator blocMatrix,word::iterator blocvector);
+word computeSumWords(vector<word> listWord);
+void *launchMatrixVectorCalculus(void* data);
 
 #endif

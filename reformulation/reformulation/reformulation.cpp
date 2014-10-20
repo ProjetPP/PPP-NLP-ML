@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 #include "Dictionary.h"
+#include <pthread.h>
+
 
 using namespace std;
 
@@ -21,7 +23,7 @@ int main(int argc, char* argv[])
 	//dico.initializeFromClex("clex_lexicon.pl");
 	//dico.save("dictionnary.txt");
 	dico.load("dictionnary.txt");
-	//system("pause");
+	pthread_exit(0);
 	return 0;
 }
 

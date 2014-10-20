@@ -1,12 +1,14 @@
 #include "Functions.h"
 #include "definitions.h"
 #include <fstream>
+#include <list>
+#include <pthread.h>
 
 Functions::Functions(void)
 {
-	fusionMatrix=vector<int>(FUSIONSIZE);
-	compactMatrix=vector<int>(3*WORDSIZE*WORDSIZE);
-	uncompactMatrix=vector<int>(3*WORDSIZE*WORDSIZE);
+  fusionMatrix=vector<float>(FUSIONSIZE);
+  compactMatrix=vector<float>(3*WORDSIZE*WORDSIZE);
+  uncompactMatrix=vector<float>(3*WORDSIZE*WORDSIZE);
 }
 
 
@@ -17,41 +19,57 @@ Functions::~Functions(void)
 
 bool Functions::load(string file)
 {
-	ifstream is(file);
-	if(is.fail())
-	{
-		cout<<"Functions paramters file "<<file<<" is not openable"<<endl;
-		return false;
-	}
-	for(int i=0;i<FUSIONSIZE;i++)
-		is>>fusionMatrix[i];
-	for(int i=0;i<COMPACTSIZE;i++)
-		is>>compactMatrix[i];
-	for(int i=0;i<UNCOMPACTSIZE;i++)
-		is>>uncompactMatrix[i];
-	cout<<"Functions parameters are correctly loaded"<<endl;
-	return true;
+  ifstream is(file);
+  if(is.fail())
+  {
+    cout<<"Functions paramters file "<<file<<" is not openable"<<endl;
+    return false;
+    
+  }
+  for(int i=0;i<FUSIONSIZE;i++)
+    is>>fusionMatrix[i];
+  for(int i=0;i<COMPACTSIZE;i++)
+    is>>compactMatrix[i];
+  for(int i=0;i<UNCOMPACTSIZE;i++)
+    is>>uncompactMatrix[i];
+  cout<<"Functions parameters are correctly loaded"<<endl;
+  return true;
 }
 
 bool Functions::save(string file)
 {
-	ofstream os(file);
-	if(os.fail())
-	{
-		cout<<"Functions paramters file "<<file<<" is not openable"<<endl;
-		return false;
-	}
-	for(int i=0;i<FUSIONSIZE;i++)
-		os<<fusionMatrix[i]<<" ";
-	for(int i=0;i<COMPACTSIZE;i++)
-		os<<compactMatrix[i]<<" ";
-	for(int i=0;i<UNCOMPACTSIZE;i++)
-		os<<uncompactMatrix[i]<<" ";
-	cout<<"Functions parameters are correctly saved"<<endl;
-	return true;
+  ofstream os(file);
+  if(os.fail())
+  {
+    cout<<"Functions paramters file "<<file<<" is not openable"<<endl;
+    return false;
+  }
+  for(int i=0;i<FUSIONSIZE;i++)
+    os<<fusionMatrix[i]<<" ";
+  for(int i=0;i<COMPACTSIZE;i++)
+    os<<compactMatrix[i]<<" ";
+  for(int i=0;i<UNCOMPACTSIZE;i++)
+    os<<uncompactMatrix[i]<<" ";
+  cout<<"Functions parameters are correctly saved"<<endl;
+  return true;
 }
 
-word computeMatrixVectorBlocAndUnlockMutex(word::iterator blocMatrix,word::iterator blocvector,pthread_mutex_t * mutex)
+word& operator+=(word& w1,word w2)
+{
+  for(int i=0;i<WORDSIZE;i++)
+    w1[i]+=w2[i];
+  return w1;
+}
+
+word operator+(word w1,word w2)
+{
+  word r;
+  for(int i=0;i<WORDSIZE;i++)
+    r.push_back(w1[i]+w2[i]);
+  return r;
+}
+
+word computeMatrixVectorBloc(word::iterator blocMatrix,word::iterator blocvector)
 {
   word result;
   for(int i=0;i<WORDSIZE;i++)
@@ -66,11 +84,66 @@ word computeMatrixVectorBlocAndUnlockMutex(word::iterator blocMatrix,word::itera
     }
     result.push_back(coeffRes);
   }
-  pthread_mutex_unlock (mutex);
   return result;
 }
 
-Request fusion(Request r1,Request r2)
+word computeSumWords(vector<word> listWord)
 {
-  //TODO Start thread to compute all the stuff
+  unsigned int s=listWord.size();
+  word r=listWord[0];
+  for(unsigned int i=1;i<s;i++)
+  {
+    r+=listWord[i];
+  }
+  return r;
+}
+
+void *launchMatrixVectorCalculus(void* data)
+{
+  vectorMatrixData* resource=static_cast<vectorMatrixData*>(data);
+  resource->result=computeMatrixVectorBloc(resource->blocMatrix,resource->blocvector);
+  return 0;
+}
+
+Request Functions::fusion(Request r1,Request r2)
+{
+  //TODO Start :ad to compute all the stuff
+  pthread_t tid[18];
+  vectorMatrixData data[18];
+  vector<float>::iterator it=this->fusionMatrix.begin();
+  for(int i=0;i<18;i++)
+  {
+    data[i].blocMatrix=it;
+    it+=WORDSIZE*WORDSIZE;
+    switch(i%6)
+    {
+      case 0:
+	data[i].blocvector=r1.getSubjectIterator();
+	break;
+      case 1:
+	data[i].blocvector=r1.getPredicateIterator();
+	break;
+      case 2:
+	data[i].blocvector=r1.getObjectIterator();
+	break;
+      case 3:
+	data[i].blocvector=r2.getSubjectIterator();
+	break;
+      case 4:
+	data[i].blocvector=r2.getPredicateIterator();
+	break;
+      case 5:
+	data[i].blocvector=r2.getObjectIterator();
+	break;
+    }
+     pthread_create(&tid[i],NULL,launchMatrixVectorCalculus,&data[i]);
+  }
+  /// wait all threads
+  for (int i = 0; i < 2; i++) 
+  {
+    pthread_join(tid[i], NULL);  
+  }
+  return Request(data[0].result+data[1].result+data[2].result+data[3].result+data[4].result+data[5].result,
+		 data[6].result+data[7].result+data[8].result+data[9].result+data[10].result+data[11].result,
+		 data[12].result+data[13].result+data[14].result+data[15].result+data[16].result+data[17].result);
 }
