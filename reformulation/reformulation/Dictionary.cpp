@@ -31,6 +31,11 @@ bool Dictionary::save(string file)
 	return true;
 }
 
+Request Dictionary::operator[](string entry)
+{
+  return content[entry];
+}
+
 bool Dictionary::load(string file)
 {
 	ifstream is(file);

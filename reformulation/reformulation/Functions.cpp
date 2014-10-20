@@ -3,6 +3,7 @@
 #include <fstream>
 #include <list>
 #include <pthread.h>
+#include <iostream>
 
 Functions::Functions(void)
 {
@@ -82,7 +83,7 @@ word computeMatrixVectorBloc(word::iterator blocMatrix,word::iterator blocvector
   {
     float coeffRes=0.0f;
     word::iterator wordit=blocvector;
-    for(int j=0;i<WORDSIZE;j++)
+    for(int j=0;j<WORDSIZE;j++)
     {
       coeffRes+=(*blocMatrix)*(*wordit);
       ++blocMatrix;
