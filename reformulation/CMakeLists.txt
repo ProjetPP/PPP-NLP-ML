@@ -9,7 +9,7 @@ add_executable(reformulation
   reformulation/Request.cpp
   reformulation/Dictionary.cpp
   reformulation/Functions.cpp
-  )
+  reformulation/Transformator.cpp)
 target_link_libraries(reformulation pthread)
 
 install(TARGETS reformulation RUNTIME DESTINATION bin)

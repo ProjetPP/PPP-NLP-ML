@@ -364,10 +364,99 @@ void Functions::accumulateGradients()
 void Functions::accGradMerge(Request inputr1, Request inputr2, Request gradOutput, float scale)
 {
   //TODO
+  word::iterator itmatrix=gradMergeMatrix.begin();
+  for(int i=0;i<3;i++)
+  {
+    for(int j=0;j<6;j++)
+    {
+      word::iterator itinput;
+      switch(j)
+      {
+	case 0:
+	  itinput=inputr1.getSubjectIterator();
+	  break;
+	case 1:
+	  itinput=inputr1.getPredicateIterator();
+	  break;
+	case 2:
+	  itinput=inputr1.getObjectIterator();
+	  break;
+	case 3:
+	  itinput=inputr2.getSubjectIterator();
+	  break;
+	case 4:
+	  itinput=inputr2.getPredicateIterator();
+	  break;
+	case 5:
+	  itinput=inputr2.getObjectIterator();
+	  break;
+      }
+      word::iterator itgradoutput;
+      switch(i)
+      {
+	case 0:
+	  itgradoutput=gradOutput.getSubjectIterator();
+	  break;
+	case 1:
+	  itgradoutput=gradOutput.getPredicateIterator();
+	  break;
+	case 2:
+	  itgradoutput=gradOutput.getObjectIterator();
+	  break;
+      }
+      for(int k=0;k<WORDSIZE;k++)
+      {
+	for(int l=0;l<WORDSIZE;l++)
+	{
+	  (*itmatrix)+=scale*(*itgradoutput)*(*itinput);
+	  ++itinput;
+	}
+	++itgradoutput;
+      }
+      
+      
+    }
+  }
 }
 void Functions::accGradCompact(Request input, word gradOutput, float scale)
 {
-  //TODO
+  word::iterator itgradoutput=gradOutput.begin();
+  word::iterator itsubject=input.getSubjectIterator();
+  word::iterator itpredicate=input.getPredicateIterator();
+  word::iterator itobject=input.getObjectIterator();
+  word::iterator itmatrix=gradCompactMatrix.begin();
+  for(int i=0;i<WORDSIZE;i++)
+  {
+    itsubject=input.getSubjectIterator();
+      for(int j=0;j<WORDSIZE;j++)
+      {
+	(*itmatrix)+=(*itsubject)*(*itgradoutput);
+	++itsubject;
+      }
+      ++itgradoutput;
+  }
+  itgradoutput=gradOutput.begin();
+  for(int i=0;i<WORDSIZE;i++)
+  {
+    itpredicate=input.getPredicateIterator();
+      for(int j=0;j<WORDSIZE;j++)
+      {
+	(*itmatrix)+=(*itpredicate)*(*itgradoutput);
+	++itpredicate;
+      }
+      ++itgradoutput;
+  }
+  itgradoutput=gradOutput.begin();
+  for(int i=0;i<WORDSIZE;i++)
+  {
+    itobject=input.getObjectIterator();
+      for(int j=0;j<WORDSIZE;j++)
+      {
+	(*itmatrix)+=scale*(*itobject)*(*itgradoutput);
+	++itobject;
+      }
+      ++itgradoutput;;
+  }
 }
 
 void Functions::accGradUncompact(word input, Request gradOutput, float scale)
@@ -402,7 +491,7 @@ void Functions::accGradUncompact(word input, Request gradOutput, float scale)
     itinput=input.begin();
       for(int j=0;j<WORDSIZE;j++)
       {
-	(*itmatrix)+=(*itobject)*(*itinput);
+	(*itmatrix)+=scale*(*itobject)*(*itinput);
 	++itinput;
       }
       ++itobject;

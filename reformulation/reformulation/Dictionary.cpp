@@ -143,7 +143,7 @@ string Dictionary::findnearestObject(Request req)
     if(d<dmin)
     {
       dmin=d;
-      res=it->second;
+      res=it->first;
     }
   }
   return res;
@@ -160,7 +160,7 @@ float dmin=numeric_limits<float>::infinity();
     if(d<dmin)
     {
       dmin=d;
-      res=it->second;
+      res=it->first;
     }
   }
   return res;
@@ -177,7 +177,7 @@ float dmin=numeric_limits<float>::infinity();
     if(d<dmin)
     {
       dmin=d;
-      res=it->second;
+      res=it->first;
     }
   }
   return res;
