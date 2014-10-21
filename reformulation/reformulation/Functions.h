@@ -11,34 +11,34 @@ using namespace std;
 class Functions
 {
 public:
-	Functions(void);
-	~Functions(void);
-	bool load(string file);
-	bool save(string file);
-	Request merge(Request r1,Request r2);
-	word compact(Request r);
-	Request uncompact(word w);
-	void clearGradient();
-	pair<Request,Request> BackPropagationMerge(Request inputr1,Request inputr2,Request gradOutput);
-	Request BackPropagationCompact(Request input,word gradOutput);
-	word BackPropagationUncompact(word input,Request gradOutput);
-	void accumulateGradients();
-	void accGradMerge(Request inputr1,Request inputr2,Request gradOutput,float scale);
-	void accGradCompact(Request input,word gradOutput,float scale);
-	void accGradUncompact(word input,Request gradOutput,float scale);
+  Functions(void);
+  ~Functions(void);
+  bool load(string file);
+  bool save(string file);
+  Request merge(Request r1,Request r2);
+  word compact(Request r);
+  Request uncompact(word w);
+  void clearGradient();
+  pair<Request,Request> BackPropagationMerge(Request inputr1,Request inputr2,Request gradOutput);
+  Request BackPropagationCompact(Request input,word gradOutput);
+  word BackPropagationUncompact(word input,Request gradOutput);
+  void accumulateGradients();
+  void accGradMerge(Request inputr1,Request inputr2,Request gradOutput,float scale);
+  void accGradCompact(Request input,word gradOutput,float scale);
+  void accGradUncompact(word input,Request gradOutput,float scale);
 private:
-	vector<float> mergeMatrix;
-	vector<float> compactMatrix;
-	vector<float> uncompactMatrix;
-	
-	Request gradInputMerge1;
-	Request gradInputMerge2;
-	Request gradInputCompact;
-	word gradInputUncompact;
-	
-	vector<float> gradMergeMatrix;
-	vector<float> gradCompactMatrix;
-	vector<float> gradUncompactMatrix;
+  vector<float> mergeMatrix;
+  vector<float> compactMatrix;
+  vector<float> uncompactMatrix;
+  
+  Request gradInputMerge1;
+  Request gradInputMerge2;
+  Request gradInputCompact;
+  word gradInputUncompact;
+  
+  vector<float> gradMergeMatrix;
+  vector<float> gradCompactMatrix;
+  vector<float> gradUncompactMatrix;
 };
 
 struct vectorMatrixData

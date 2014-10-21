@@ -23,9 +23,6 @@ Functions::Functions(void):
     compactMatrix[i]=((static_cast<float>(rand()%2000))/1000.0f-1.0f)/WORDSIZE;
   for(int i=0;i<UNCOMPACTSIZE;i++)
     uncompactMatrix[i]=((static_cast<float>(rand()%2000))/1000.0f-1.0f)/WORDSIZE;
-  gradMergeMatrix;
-gradCompactMatrix;
-	vector<float> gradUncompactMatrix;
 }
 
 
@@ -148,23 +145,23 @@ Request Functions::merge(Request r1,Request r2)
     switch(i%6)
     {
       case 0:
-	data[i].blocvector=r1.getSubjectIterator();
-	break;
+  data[i].blocvector=r1.getSubjectIterator();
+  break;
       case 1:
-	data[i].blocvector=r1.getPredicateIterator();
-	break;
+  data[i].blocvector=r1.getPredicateIterator();
+  break;
       case 2:
-	data[i].blocvector=r1.getObjectIterator();
-	break;
+  data[i].blocvector=r1.getObjectIterator();
+  break;
       case 3:
-	data[i].blocvector=r2.getSubjectIterator();
-	break;
+  data[i].blocvector=r2.getSubjectIterator();
+  break;
       case 4:
-	data[i].blocvector=r2.getPredicateIterator();
-	break;
+  data[i].blocvector=r2.getPredicateIterator();
+  break;
       case 5:
-	data[i].blocvector=r2.getObjectIterator();
-	break;
+  data[i].blocvector=r2.getObjectIterator();
+  break;
     }
      pthread_create(&tid[i],NULL,launchMatrixVectorCalculus,&data[i]);
   }
@@ -174,8 +171,8 @@ Request Functions::merge(Request r1,Request r2)
     pthread_join(tid[i], NULL);  
   }
   return Request(data[0].result+data[1].result+data[2].result+data[3].result+data[4].result+data[5].result,
-		 data[6].result+data[7].result+data[8].result+data[9].result+data[10].result+data[11].result,
-		 data[12].result+data[13].result+data[14].result+data[15].result+data[16].result+data[17].result);
+     data[6].result+data[7].result+data[8].result+data[9].result+data[10].result+data[11].result,
+     data[12].result+data[13].result+data[14].result+data[15].result+data[16].result+data[17].result);
 }
 
 word Functions::compact(Request r)
@@ -190,14 +187,14 @@ word Functions::compact(Request r)
     switch(i)
     {
       case 0:
-	data[i].blocvector=r.getSubjectIterator();
-	break;
+  data[i].blocvector=r.getSubjectIterator();
+  break;
       case 1:
-	data[i].blocvector=r.getPredicateIterator();
-	break;
+  data[i].blocvector=r.getPredicateIterator();
+  break;
       case 2:
-	data[i].blocvector=r.getObjectIterator();
-	break;
+  data[i].blocvector=r.getObjectIterator();
+  break;
     }
      pthread_create(&tid[i],NULL,launchMatrixVectorCalculus,&data[i]);
   }
@@ -258,14 +255,14 @@ pair<Request,Request> Functions::BackPropagationMerge(Request inputr1,Request in
     switch(i%3)
     {
       case 0:
-	data[i].blocvector=gradOutput.getSubjectIterator();
-	break;
+  data[i].blocvector=gradOutput.getSubjectIterator();
+  break;
       case 1:
-	data[i].blocvector=gradOutput.getPredicateIterator();
-	break;
+  data[i].blocvector=gradOutput.getPredicateIterator();
+  break;
       case 2:
-	data[i].blocvector=gradOutput.getObjectIterator();
-	break;
+  data[i].blocvector=gradOutput.getObjectIterator();
+  break;
     }
      pthread_create(&tid[i],NULL,launchVectorMatrixCalculus,&data[i]);
   }
@@ -275,11 +272,11 @@ pair<Request,Request> Functions::BackPropagationMerge(Request inputr1,Request in
     pthread_join(tid[i], NULL);  
   }
   Request r1(data[0].result+data[6].result+data[12].result,
-		 data[1].result+data[7].result+data[13].result,
-		 data[2].result+data[8].result+data[14].result);
+     data[1].result+data[7].result+data[13].result,
+     data[2].result+data[8].result+data[14].result);
   Request r2(data[3].result+data[9].result+data[15].result,
-		 data[4].result+data[10].result+data[16].result,
-		 data[5].result+data[11].result+data[17].result);
+     data[4].result+data[10].result+data[16].result,
+     data[5].result+data[11].result+data[17].result);
   gradInputMerge1+=r1;
   gradInputMerge2+=r2;
   return pair<Request,Request>(gradInputMerge1,gradInputMerge1);
@@ -297,14 +294,14 @@ Request Functions::BackPropagationCompact(Request input,word gradOutput)
     switch(i)
     {
       case 0:
-	data[i].blocvector=gradOutput.begin();
-	break;
+  data[i].blocvector=gradOutput.begin();
+  break;
       case 1:
-	data[i].blocvector=gradOutput.begin();
-	break;
+  data[i].blocvector=gradOutput.begin();
+  break;
       case 2:
-	data[i].blocvector=gradOutput.begin();
-	break;
+  data[i].blocvector=gradOutput.begin();
+  break;
     }
      pthread_create(&tid[i],NULL,launchVectorMatrixCalculus,&data[i]);
   }
@@ -317,7 +314,7 @@ Request Functions::BackPropagationCompact(Request input,word gradOutput)
   gradInputCompact+=r;
   return r;
 }
-	
+  
 word Functions::BackPropagationUncompact(word input, Request gradOutput)
 {
   pthread_t tid[3];
@@ -330,14 +327,14 @@ word Functions::BackPropagationUncompact(word input, Request gradOutput)
     switch(i)
     {
       case 0:
-	data[i].blocvector=gradOutput.getSubjectIterator();
-	break;
+  data[i].blocvector=gradOutput.getSubjectIterator();
+  break;
       case 1:
-	data[i].blocvector=gradOutput.getPredicateIterator();
-	break;
+  data[i].blocvector=gradOutput.getPredicateIterator();
+  break;
       case 2:
-	data[i].blocvector=gradOutput.getObjectIterator();
-	break;
+  data[i].blocvector=gradOutput.getObjectIterator();
+  break;
     }
      pthread_create(&tid[i],NULL,launchVectorMatrixCalculus,&data[i]);
   }
@@ -372,46 +369,46 @@ void Functions::accGradMerge(Request inputr1, Request inputr2, Request gradOutpu
       word::iterator itinput;
       switch(j)
       {
-	case 0:
-	  itinput=inputr1.getSubjectIterator();
-	  break;
-	case 1:
-	  itinput=inputr1.getPredicateIterator();
-	  break;
-	case 2:
-	  itinput=inputr1.getObjectIterator();
-	  break;
-	case 3:
-	  itinput=inputr2.getSubjectIterator();
-	  break;
-	case 4:
-	  itinput=inputr2.getPredicateIterator();
-	  break;
-	case 5:
-	  itinput=inputr2.getObjectIterator();
-	  break;
+  case 0:
+    itinput=inputr1.getSubjectIterator();
+    break;
+  case 1:
+    itinput=inputr1.getPredicateIterator();
+    break;
+  case 2:
+    itinput=inputr1.getObjectIterator();
+    break;
+  case 3:
+    itinput=inputr2.getSubjectIterator();
+    break;
+  case 4:
+    itinput=inputr2.getPredicateIterator();
+    break;
+  case 5:
+    itinput=inputr2.getObjectIterator();
+    break;
       }
       word::iterator itgradoutput;
       switch(i)
       {
-	case 0:
-	  itgradoutput=gradOutput.getSubjectIterator();
-	  break;
-	case 1:
-	  itgradoutput=gradOutput.getPredicateIterator();
-	  break;
-	case 2:
-	  itgradoutput=gradOutput.getObjectIterator();
-	  break;
+  case 0:
+    itgradoutput=gradOutput.getSubjectIterator();
+    break;
+  case 1:
+    itgradoutput=gradOutput.getPredicateIterator();
+    break;
+  case 2:
+    itgradoutput=gradOutput.getObjectIterator();
+    break;
       }
       for(int k=0;k<WORDSIZE;k++)
       {
-	for(int l=0;l<WORDSIZE;l++)
-	{
-	  (*itmatrix)+=scale*(*itgradoutput)*(*itinput);
-	  ++itinput;
-	}
-	++itgradoutput;
+  for(int l=0;l<WORDSIZE;l++)
+  {
+    (*itmatrix)+=scale*(*itgradoutput)*(*itinput);
+    ++itinput;
+  }
+  ++itgradoutput;
       }
       
       
@@ -430,8 +427,8 @@ void Functions::accGradCompact(Request input, word gradOutput, float scale)
     itsubject=input.getSubjectIterator();
       for(int j=0;j<WORDSIZE;j++)
       {
-	(*itmatrix)+=(*itsubject)*(*itgradoutput);
-	++itsubject;
+  (*itmatrix)+=(*itsubject)*(*itgradoutput);
+  ++itsubject;
       }
       ++itgradoutput;
   }
@@ -441,8 +438,8 @@ void Functions::accGradCompact(Request input, word gradOutput, float scale)
     itpredicate=input.getPredicateIterator();
       for(int j=0;j<WORDSIZE;j++)
       {
-	(*itmatrix)+=(*itpredicate)*(*itgradoutput);
-	++itpredicate;
+  (*itmatrix)+=(*itpredicate)*(*itgradoutput);
+  ++itpredicate;
       }
       ++itgradoutput;
   }
@@ -452,8 +449,8 @@ void Functions::accGradCompact(Request input, word gradOutput, float scale)
     itobject=input.getObjectIterator();
       for(int j=0;j<WORDSIZE;j++)
       {
-	(*itmatrix)+=scale*(*itobject)*(*itgradoutput);
-	++itobject;
+  (*itmatrix)+=scale*(*itobject)*(*itgradoutput);
+  ++itobject;
       }
       ++itgradoutput;;
   }
@@ -471,8 +468,8 @@ void Functions::accGradUncompact(word input, Request gradOutput, float scale)
     itinput=input.begin();
       for(int j=0;j<WORDSIZE;j++)
       {
-	(*itmatrix)+=(*itsubject)*(*itinput);
-	++itinput;
+  (*itmatrix)+=(*itsubject)*(*itinput);
+  ++itinput;
       }
       ++itsubject;
   }
@@ -481,8 +478,8 @@ void Functions::accGradUncompact(word input, Request gradOutput, float scale)
     itinput=input.begin();
       for(int j=0;j<WORDSIZE;j++)
       {
-	(*itmatrix)+=(*itpredicate)*(*itinput);
-	++itinput;
+  (*itmatrix)+=(*itpredicate)*(*itinput);
+  ++itinput;
       }
       ++itpredicate;
   }
@@ -491,8 +488,8 @@ void Functions::accGradUncompact(word input, Request gradOutput, float scale)
     itinput=input.begin();
       for(int j=0;j<WORDSIZE;j++)
       {
-	(*itmatrix)+=scale*(*itobject)*(*itinput);
-	++itinput;
+  (*itmatrix)+=scale*(*itobject)*(*itinput);
+  ++itinput;
       }
       ++itobject;
   }

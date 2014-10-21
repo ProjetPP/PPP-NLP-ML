@@ -47,66 +47,66 @@ bool Request::isValid() const
 
 float Request::getDistance2subject(Request r) const
 {
-	float sum=0.0f;
-	float term;
-	for(int i=0;i<WORDSIZE;i++)
-	{
-		term=(subject[static_cast<size_t>(i)]-r.subject[static_cast<size_t>(i)]);
-		sum+=term*term;
-	}
-	return sqrt(sum/static_cast<float>(WORDSIZE));
+  float sum=0.0f;
+  float term;
+  for(int i=0;i<WORDSIZE;i++)
+  {
+    term=(subject[static_cast<size_t>(i)]-r.subject[static_cast<size_t>(i)]);
+    sum+=term*term;
+  }
+  return sqrt(sum/static_cast<float>(WORDSIZE));
 }
 
 float Request::getDistance2object(Request r) const
 {
-	float sum=0.0f;
-	float term;
-	for(int i=0;i<WORDSIZE;i++)
-	{
-		term=(object[static_cast<size_t>(i)]-r.object[static_cast<size_t>(i)]);
-		sum+=term*term;
-	}
-	return sqrt(sum/static_cast<float>(WORDSIZE));
+  float sum=0.0f;
+  float term;
+  for(int i=0;i<WORDSIZE;i++)
+  {
+    term=(object[static_cast<size_t>(i)]-r.object[static_cast<size_t>(i)]);
+    sum+=term*term;
+  }
+  return sqrt(sum/static_cast<float>(WORDSIZE));
 }
 
 float Request::getDistance2predicate(Request r) const
 {
-	float sum=0.0f;
-	float term;
-	for(int i=0;i<WORDSIZE;i++)
-	{
-		term=(predicate[static_cast<size_t>(i)]-r.predicate[static_cast<size_t>(i)]);
-		sum+=term*term;
-	}
-	return sqrt(sum/static_cast<float>(WORDSIZE));
+  float sum=0.0f;
+  float term;
+  for(int i=0;i<WORDSIZE;i++)
+  {
+    term=(predicate[static_cast<size_t>(i)]-r.predicate[static_cast<size_t>(i)]);
+    sum+=term*term;
+  }
+  return sqrt(sum/static_cast<float>(WORDSIZE));
 }
 
 ostream& Request::output(ostream& os)
 {
-	for(int i=0;i<WORDSIZE;i++)
-	{
-		os<<this->subject[static_cast<size_t>(i)]<<" "<<this->predicate[static_cast<size_t>(i)]<<" "<<this->object[static_cast<size_t>(i)]<<" ";
-	}
-	return os;
+  for(int i=0;i<WORDSIZE;i++)
+  {
+    os<<this->subject[static_cast<size_t>(i)]<<" "<<this->predicate[static_cast<size_t>(i)]<<" "<<this->object[static_cast<size_t>(i)]<<" ";
+  }
+  return os;
 }
 
 istream& Request::input(istream& is)
 {
-	for(int i=0;i<WORDSIZE;i++)
-	{
-		is>>this->subject[static_cast<size_t>(i)]>>this->predicate[static_cast<size_t>(i)]>>this->object[static_cast<size_t>(i)];
-	}
-	return is;
+  for(int i=0;i<WORDSIZE;i++)
+  {
+    is>>this->subject[static_cast<size_t>(i)]>>this->predicate[static_cast<size_t>(i)]>>this->object[static_cast<size_t>(i)];
+  }
+  return is;
 }
 
 ostream& operator<<(ostream& os,Request& req)
 {
-	return req.output(os);
+  return req.output(os);
 }
 
 istream& operator>>(istream& is,Request& req)
 {
-	return req.input(is);
+  return req.input(is);
 }
 
 word& operator+=(word& w1,word w2)
