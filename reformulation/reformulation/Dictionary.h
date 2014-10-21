@@ -21,7 +21,6 @@ public:
 	// - using CLEX see : https://github.com/Attempto/Clex/blob/master/clex_lexicon.pl
 	bool initializeFromClex(string clexfile);
 	//Basic operation - function names are explicit
-	//TODO : Choose norm 1 or 2 -> norm 2 ?
 	Request operator[](string entry);
 	string findnearestSubject(Request req);
 	string findnearestObject(Request req);

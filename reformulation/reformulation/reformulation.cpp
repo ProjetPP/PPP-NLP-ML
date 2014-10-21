@@ -1,4 +1,4 @@
-// reformulation.cpp : définit le point d'entrée pour l'application console.
+// reformulation.cpp : definit le point d'entrée pour l'application console.
 //
 
 #include <iostream>

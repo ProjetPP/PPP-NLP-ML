@@ -19,17 +19,26 @@ public:
 	word compact(Request r);
 	Request uncompact(word w);
 	void clearGradient();
-	void BackPropagationMerge(vector<float> input,Request gradOutput);
-	void BackPropagationCompact(vector<float> input,Request gradOutput);
-	void BackPropagationUncompact(vector<float> input,Request gradOutput);
+	pair<Request,Request> BackPropagationMerge(Request inputr1,Request inputr2,Request gradOutput);
+	Request BackPropagationCompact(Request input,word gradOutput);
+	word BackPropagationUncompact(word input,Request gradOutput);
+	void accumulateGradients();
+	void accGradMerge(Request inputr1,Request inputr2,Request gradOutput,float scale);
+	void accGradCompact(Request input,word gradOutput,float scale);
+	void accGradUncompact(word input,Request gradOutput,float scale);
 private:
 	vector<float> mergeMatrix;
 	vector<float> compactMatrix;
 	vector<float> uncompactMatrix;
 	
-	vector<float> gradInputMerge;
-	vector<float> gradInputCompact;
-	vector<float> gradInputUncompact;
+	Request gradInputMerge1;
+	Request gradInputMerge2;
+	Request gradInputCompact;
+	word gradInputUncompact;
+	
+	vector<float> gradMergeMatrix;
+	vector<float> gradCompactMatrix;
+	vector<float> gradUncompactMatrix;
 };
 
 struct vectorMatrixData
@@ -39,11 +48,11 @@ struct vectorMatrixData
   word result;
 };
 
-word& operator+=(word& w1,word w2);
-word operator+(word w1,word w2);
 
 word computeMatrixVectorBloc(word::iterator blocMatrix,word::iterator blocvector);
+word computeVectorMatrixBloc(word::iterator blocMatrix,word::iterator blocvector);
 word computeSumWords(vector<word> listWord);
 void *launchMatrixVectorCalculus(void* data);
+void *launchVectorMatrixCalculus(void* data);
 
 #endif

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include "definitions.h"
+#include <limits>
 
 
 Dictionary::Dictionary(void) :
@@ -128,4 +129,56 @@ void Dictionary::parseClexLine(char* line)
 	if(nature=="pn_sg"||nature=="pn_pl"||nature=="pndef_sg"||nature=="pndef_pl")
 		return;//propers names are unsed in dictionary
 	addWord(line);
+}
+
+
+string Dictionary::findnearestObject(Request req)
+{
+  float dmin=numeric_limits<float>::infinity();
+  float d;
+  string res;
+  for (std::map<string,Request>::iterator it=content.begin(); it!=content.end(); ++it)
+  {
+    d=it->second.getTransformedDistanceObject(req,dmin);
+    if(d<dmin)
+    {
+      dmin=d;
+      res=it->second;
+    }
+  }
+  return res;
+}
+
+string Dictionary::findnearestPredicate(Request req)
+{
+float dmin=numeric_limits<float>::infinity();
+  float d;
+  string res;
+  for (std::map<string,Request>::iterator it=content.begin(); it!=content.end(); ++it)
+  {
+    d=it->second.getTransformedDistancePredicate(req,dmin);
+    if(d<dmin)
+    {
+      dmin=d;
+      res=it->second;
+    }
+  }
+  return res;
+}
+
+string Dictionary::findnearestSubject(Request req)
+{
+float dmin=numeric_limits<float>::infinity();
+  float d;
+  string res;
+  for (std::map<string,Request>::iterator it=content.begin(); it!=content.end(); ++it)
+  {
+    d=it->second.getTransformedDistanceSubject(req,dmin);
+    if(d<dmin)
+    {
+      dmin=d;
+      res=it->second;
+    }
+  }
+  return res;
 }
