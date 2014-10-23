@@ -17,7 +17,7 @@ public:
   //Request is filled with zeros
   Request(bool nulconstructor);
   //Maybe you have some data
-  Request(word subject,word predicte,word object);
+  Request(word subject,word predicate,word object);
   ~Request(void);
   bool isValid() const __attribute__((pure));
   //Distance operator using norm 2, transformedDistance compute a real for distance comparaison
@@ -29,7 +29,7 @@ public:
   float getDistance2subject(Request r) const __attribute__((pure));
   float getDistance2object(Request r) const __attribute__((pure));
   float getDistance2predicate(Request r) const __attribute__((pure));
-  
+
   //operator to save and load
   ostream& output(ostream& os);
   istream& input(istream& is);
@@ -37,9 +37,9 @@ public:
   word getSubject();
   word getObject();
   word getPredicate();
-  word::iterator getSubjectIterator();
-  word::iterator getObjectIterator();
-  word::iterator getPredicateIterator();
+  word::iterator getSubjectIterator() __attribute__((pure));
+  word::iterator getObjectIterator() __attribute__((pure));
+  word::iterator getPredicateIterator() __attribute__((pure));
   Request operator+(Request a);
   void operator+=(Request a);
   void reset();

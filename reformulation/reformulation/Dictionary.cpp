@@ -94,25 +94,25 @@ void Dictionary::addQuotedWord(char* line)
 {
   line++;
   line++;
-  string word;
+  string word_;
   while(line[0]!='\'')
   {
-    word+=line[0];
+    word_+=line[0];
     line++;
   }
-  content[word]=Request();
+  content[word_]=Request();
 }
 
 void Dictionary::addNoQuotedWord(char* line)
 {
   line++;
-  string word;
+  string word_;
   while(line[0]!=',')
   {
-    word+=line[0];
+    word_+=line[0];
     line++;
   }
-  content[word]=Request();
+  content[word_]=Request();
 }
 
 
