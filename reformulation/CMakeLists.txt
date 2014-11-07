@@ -4,12 +4,14 @@ ADD_DEFINITIONS(
     # Other flags
 )
 project(reformulation)
-add_executable(reformulation 
+add_library(reformulation SHARED
   reformulation/reformulation.cpp
   reformulation/Request.cpp
   reformulation/Dictionary.cpp
   reformulation/Functions.cpp
   reformulation/Transformator.cpp)
-target_link_libraries(reformulation pthread)
+link_directories(/usr/lib/python3.4m)
+target_link_libraries(reformulation pthread python3.4m)
+include_directories(reformulation /usr/include/python3.4m)
 
-install(TARGETS reformulation RUNTIME DESTINATION bin)
+#install(TARGETS reformulation RUNTIME DESTINATION bin)
