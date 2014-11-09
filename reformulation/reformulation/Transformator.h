@@ -4,6 +4,7 @@
 #include "Dictionary.h"
 #include "Functions.h"
 #include <limits>
+#include "definitions.h"
 
 class SimplifiedRequestTree
 {
@@ -30,11 +31,13 @@ public:
   
   word compact(Functions* func);
   SimplifiedRequestTree* getSimplifiedRequestTree();
+  string stringify(Dictionary* dico);
 private:
   Type mytype;
   Request data;
   RequestTree* subject;
   RequestTree* object;
+  string realword;
 };
 
 class Transformator
@@ -42,9 +45,12 @@ class Transformator
 public:
   Transformator(Functions* functions, Dictionary* dictionary, float precision=numeric_limits<float>::infinity());
   
-  void reformulation(RequestTree rt);
+  string reformulation(string req);
+  string reformulation(RequestTree rt);
   
 private:
+  string stringify(RequestTree rt);
+  map<string,string> tags;
   Functions* func;
   Dictionary* dico;
   float delta;

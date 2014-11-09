@@ -27,7 +27,7 @@ SimplifiedRequestTree::~SimplifiedRequestTree()
 
 
 RequestTree::RequestTree(RequestTree::Type type, Request data):
-mytype(type),data(data)
+mytype(type),data(data),realword("")
 {
   if(type==Type::PREDICATE)
     throw std::exception();//bad constructor
@@ -35,7 +35,7 @@ mytype(type),data(data)
 }
 
 RequestTree::RequestTree(RequestTree::Type type, Request predicate, RequestTree* subjectReq, RequestTree* objectReq):
-mytype(type),data(predicate),subject(subjectReq),object(objectReq)
+mytype(type),data(predicate),subject(subjectReq),object(objectReq),realword("")
 {
   if(type!=Type::PREDICATE)
     throw std::exception();//bad constructor
@@ -50,7 +50,8 @@ RequestTree::~RequestTree()
   }
 }
 
-RequestTree::RequestTree(word data,Functions* func,Dictionary* dico,float delta)
+RequestTree::RequestTree(word data,Functions* func,Dictionary* dico,float delta):
+realword("")
 {
   mytype=Type::PREDICATE;
   Request req=func->uncompact(data);
@@ -59,12 +60,12 @@ RequestTree::RequestTree(word data,Functions* func,Dictionary* dico,float delta)
   Request objectFound=(*dico)[dico->findnearestObject(req)];
   
   if(subjectFound.getDistance2subject(req)>delta)
-    subject=new RequestTree(req.getSubject(),func,dico,delta);
+    subject=new RequestTree(req.getSubject(),func,dico,delta*NOTINFINITERECONSTRUCTIONFACTOR);
   else
     subject=new RequestTree(Type::SUBJECT,subjectFound);
   
   if(objectFound.getDistance2object(req)>delta)
-    object=new RequestTree(req.getObject(),func,dico,delta);
+    object=new RequestTree(req.getObject(),func,dico,delta*NOTINFINITERECONSTRUCTIONFACTOR);
   else
     object=new RequestTree(Type::SUBJECT,objectFound);
     
@@ -75,6 +76,33 @@ word RequestTree::compact(Functions* func)
   if(mytype==Type::SUBJECT)return data.getSubject();
   if(mytype==Type::OBJECT)return data.getObject();
   return func->compact(Request(this->subject->compact(func),this->data.getPredicate(),this->object->compact(func)));
+}
+
+
+string RequestTree::stringify(Dictionary* dico)
+{
+  //TODO Add extra string to save real word/
+  string res;
+  switch(this->mytype)
+  {
+    case Type::PREDICATE:
+      res="(";
+      res+=subject->stringify(dico);
+      res+=",";
+      if(realword!="")res+=realword;
+      else
+	res+=dico->findnearestPredicate(this->data);
+      res+=",";
+      res+=object->stringify(dico);
+      res+=")";
+      return res;
+    case Type::OBJECT:
+      if(realword!="")return realword;
+      return dico->findnearestObject(this->data);
+    case Type::SUBJECT:
+      if(realword!="")return realword;
+      return dico->findnearestSubject(this->data);
+  }
 }
 
 SimplifiedRequestTree* RequestTree::getSimplifiedRequestTree()
@@ -90,7 +118,40 @@ func(functions),dico(dictionary),delta(precision)
 {
 }
 
-void Transformator::reformulation(RequestTree rt)
+string Transformator::reformulation(RequestTree rt)
 {
-  
+    word cmp =rt.compact(this->func);
+    RequestTree result(cmp,this->func,this->dico,this->delta);
+    return this->stringify(result);
 }
+
+string Transformator::reformulation(string req)
+{
+  //parse and add tags (save tag)
+  //build request
+  //call reformulation
+}
+
+
+string Transformator::stringify(RequestTree rt)
+{
+  string prefinal=rt.stringify(this->dico);
+  unsigned int t=prefinal.size();
+  for(unsigned int i=0;i<t;i++)
+  {
+    if(prefinal[i]=='#')
+    {
+      string tag;
+      unsigned int j=i;
+      j++;
+      while((prefinal[j]!=',')||(prefinal[j]!=')'))
+      {
+	tag+=prefinal[j];
+	j++;
+      }
+    //replace tag here  
+    }
+  }
+  //parse and remove tags
+}
+

@@ -71,14 +71,15 @@ bool Dictionary::initializeFromClex(string clexfile)
   {
     parseClexLine(buffer);
   }
-  content["UNKOWN1"]=Request();
-  content["UNKOWN2"]=Request();
-  content["NAME1"]=Request();
-  content["NAME2"]=Request();
-  content["NAME3"]=Request();
-  content["VALUE1"]=Request();
-  content["VALUE2"]=Request();
-  content["VALUE3"]=Request();
+  content["#UNKOWN1"]=Request();
+  content["#UNKOWN2"]=Request();
+  content["#UNKOWN3"]=Request();
+  content["#NAME1"]=Request();
+  content["#NAME2"]=Request();
+  content["#NAME3"]=Request();
+  content["#VALUE1"]=Request();
+  content["#VALUE2"]=Request();
+  content["#VALUE3"]=Request();
 
   cout<<"Dictionnary successfully imported from clex"<<endl;
   return true;
