@@ -80,6 +80,7 @@ bool Dictionary::initializeFromClex(string clexfile)
   content["VALUE2"]=Request();
   content["VALUE3"]=Request();
 
+  cout<<"Dictionnary successfully imported from clex"<<endl;
   return true;
 }
 

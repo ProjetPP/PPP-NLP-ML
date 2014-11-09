@@ -27,19 +27,23 @@ inline bool fileExists (const std::string& name) {
     }   
 }
 
-void init()
+bool init()
 {
   if(!fileExists("dictionnary.txt"))
-    dico.initializeFromClex("clex_lexicon.pl");
+  {
+    if(!dico.initializeFromClex("clex_lexicon.pl"))
+      return false;
+  }
   else
     dico.load("dictionnary.txt");
   if(fileExists("functions.txt"))
-    functions.load("functions.txt");
+    if(!functions.load("functions.txt"))
+      return false;
 }
 
 void save()
 {
-  dico.load("dictionnary.txt");
+  dico.save("dictionnary.txt");
   functions.save("functions.txt");
 }
 
@@ -69,17 +73,33 @@ void save()
   return 0;
 }*/
 
+static PyObject *
+reformulation_init(PyObject *self, PyObject *args)
+{
+  if (!PyArg_ParseTuple(args, ""))
+        return NULL;
+  if(init())
+    return Py_True;
+  else
+    return Py_False;
+}
+
+static PyObject *
+reformulation_save(PyObject *self, PyObject *args)
+{
+  if (!PyArg_ParseTuple(args, ""))
+        return NULL;
+  save();
+  return Py_True;
+}
+
+
 
 struct module_state {
     PyObject *error;
 };
 
-#if PY_MAJOR_VERSION >= 3
 #define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
-#else
-#define GETSTATE(m) (&_state)
-static struct module_state _state;
-#endif
 
 static PyObject *
 error_out(PyObject *m) {
@@ -88,19 +108,19 @@ error_out(PyObject *m) {
     return NULL;
 }
 
-static PyMethodDef myextension_methods[] = {
+static PyMethodDef reformulation_methods[] = {
     {"error_out", (PyCFunction)error_out, METH_NOARGS, NULL},
+    {"init",  reformulation_init, METH_VARARGS,"First method you should call."},
+    {"save",  reformulation_save, METH_VARARGS,"Saving is important."},
     {NULL, NULL}
 };
 
-#if PY_MAJOR_VERSION >= 3
-
-static int myextension_traverse(PyObject *m, visitproc visit, void *arg) {
+static int reformulation_traverse(PyObject *m, visitproc visit, void *arg) {
     Py_VISIT(GETSTATE(m)->error);
     return 0;
 }
 
-static int myextension_clear(PyObject *m) {
+static int reformulation_clear(PyObject *m) {
     Py_CLEAR(GETSTATE(m)->error);
     return 0;
 }
@@ -108,46 +128,33 @@ static int myextension_clear(PyObject *m) {
 
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
-        "myextension",
+        "reformulation",
         NULL,
         sizeof(struct module_state),
-        myextension_methods,
+        reformulation_methods,
         NULL,
-        myextension_traverse,
-        myextension_clear,
+        reformulation_traverse,
+        reformulation_clear,
         NULL
 };
 
-#define INITERROR return NULL
+//PyObject *
+PyMODINIT_FUNC
+PyInit_libreformulation(void)
 
-PyObject *
-PyInit_myextension(void)
-
-#else
-#define INITERROR return
-
-void
-initmyextension(void)
-#endif
 {
-#if PY_MAJOR_VERSION >= 3
     PyObject *module = PyModule_Create(&moduledef);
-#else
-    PyObject *module = Py_InitModule("myextension", myextension_methods);
-#endif
 
     if (module == NULL)
-        INITERROR;
+        return NULL;
     struct module_state *st = GETSTATE(module);
 
-    st->error = PyErr_NewException("myextension.Error", NULL, NULL);
+    st->error = PyErr_NewException("reformulation.Error", NULL, NULL);
     if (st->error == NULL) {
         Py_DECREF(module);
-        INITERROR;
+        return NULL;
     }
 
-#if PY_MAJOR_VERSION >= 3
     return module;
-#endif
 }
 
