@@ -10,8 +10,8 @@ add_library(reformulation SHARED
   reformulation/Dictionary.cpp
   reformulation/Functions.cpp
   reformulation/Transformator.cpp)
-link_directories(/usr/lib/python3.4m)
-target_link_libraries(reformulation pthread python3.4m)
-include_directories(reformulation /usr/include/python3.4m)
+find_package(PythonLibs REQUIRED)
+include_directories(${PYTHON_INCLUDE_DIRS})
+target_link_libraries(reformulation pthread ${PYTHON_LIBRARIES})
 
 #install(TARGETS reformulation RUNTIME DESTINATION bin)
