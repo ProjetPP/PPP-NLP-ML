@@ -27,6 +27,7 @@ public:
   RequestTree(RequestTree::Type, Request data);
   RequestTree(RequestTree::Type, Request predicate,RequestTree* subjectReq,RequestTree * objectReq);
   RequestTree(word data,Functions* func,Dictionary* dico,float delta);
+  RequestTree(string input,Dictionary* dico,RequestTree::Type supposedType=RequestTree::PREDICATE);
   ~RequestTree();
   
   word compact(Functions* func);

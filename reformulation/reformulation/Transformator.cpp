@@ -121,6 +121,65 @@ SimplifiedRequestTree* RequestTree::getSimplifiedRequestTree()
   return new SimplifiedRequestTree(SimplifiedRequestTree::PREDICATE,subject->getSimplifiedRequestTree(),object->getSimplifiedRequestTree());
 }
 
+RequestTree::RequestTree(string input, Dictionary* dico, RequestTree::Type supposedType)
+{
+  if(input[0]==',')
+    throw "Input Format error: extra , found, check it";
+  if(input[0]!='(')
+  {
+    this->realword=input;
+    this->mytype==supposedType;
+    if(this->mytype==Type::PREDICATE)
+      throw "Unexpected error predicate is a tree"; //Safe cheking
+    data=(*dico)[input];
+    return;
+  }
+  mytype=Type::PREDICATE;
+  unsigned int i,t,j;
+  t=input.size();
+  i=1;
+  int counter=0;
+  string preparesubject,prepareobject;
+  while((i<t)&&((counter!=0) || (input[i]!=',')))
+  {
+    if(input[i]=='(')counter++;
+    if(input[i]==')')counter--;
+    if(counter<0)
+      throw "Input Format error: extra ) found, check it";
+    i++;
+  }
+  if(i==t)
+    throw "Input Format error: premature end, check it"
+  preparesubject=input.substr(1,i-2);
+  i++;
+  j=i;
+  while((i<t)&&(input[i]!=','))
+  {
+    if((input[i]=='(')||(input[i]==')'))
+      throw "Input Format error: extra ( or ) found in predicate, check it";
+    i++;
+  }
+  if(i==t)
+    throw "Input Format error: premature end, check it";
+  realword=input.substr(j,i-j-1);
+  data=(*dico)[realword];
+  i++;
+  j=i;
+  while((i<t)&&((counter!=0) || (input[i]!=')')))
+  {
+    if(input[i]=='(')counter++;
+    if(input[i]==')')counter--;
+    if(counter<0)
+      throw "Input Format error: extra ) found, check it";
+    i++;
+  }
+  prepareobject=input.substr(j,i-j-1);
+  if(i+1!=t)
+    throw "Input Format error: extra caracters found, check it";
+  subject=new RequestTree(preparesubject,dico,Type::SUBJECT);
+  object=new RequestTree(prepareobject,dico,Type::OBJECT);
+}
+
 
 Transformator::Transformator(Functions* functions, Dictionary* dictionary,float precision):
 func(functions),dico(dictionary),delta(precision)
@@ -159,8 +218,7 @@ string Transformator::reformulation(string req)
 	prepare+=this->wordToTagOrWord(ent);
     }
   }
-  //TODO build request
-  //TODO call reformulation
+  this->reformulation(RequestTree(prepare,dico));
 }
 
 
