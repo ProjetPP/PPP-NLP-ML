@@ -50,6 +50,8 @@ public:
   
 private:
   string stringify(RequestTree rt);
+  string wordToTagOrWord(string entity);
+  string tagToWord(string tag);
   map<string,string> tags;
   Functions* func;
   Dictionary* dico;

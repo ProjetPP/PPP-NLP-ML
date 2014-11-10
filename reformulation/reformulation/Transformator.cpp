@@ -1,5 +1,6 @@
 #include "Transformator.h"
 #include <exception>
+#include <regex>
 
 SimplifiedRequestTree::SimplifiedRequestTree(SimplifiedRequestTree::Type type,SimplifiedRequestTree* subjectReq, SimplifiedRequestTree* objectReq):
 mytype(type),subject(subjectReq),object(objectReq)
@@ -55,19 +56,28 @@ realword("")
 {
   mytype=Type::PREDICATE;
   Request req=func->uncompact(data);
-  this->data=(*dico)[dico->findnearestPredicate(req)];
-  Request subjectFound=(*dico)[dico->findnearestSubject(req)];
-  Request objectFound=(*dico)[dico->findnearestObject(req)];
+  realword=dico->findnearestPredicate(req);
+  this->data=(*dico)[realword];
+  string supposedsubject=dico->findnearestSubject(req);
+  Request subjectFound=(*dico)[supposedsubject];
+  string supposedobject=dico->findnearestObject(req);
+  Request objectFound=(*dico)[supposedobject];
   
   if(subjectFound.getDistance2subject(req)>delta)
     subject=new RequestTree(req.getSubject(),func,dico,delta*NOTINFINITERECONSTRUCTIONFACTOR);
   else
+  {
     subject=new RequestTree(Type::SUBJECT,subjectFound);
+    subject->realword=supposedsubject;
+  }
   
   if(objectFound.getDistance2object(req)>delta)
     object=new RequestTree(req.getObject(),func,dico,delta*NOTINFINITERECONSTRUCTIONFACTOR);
   else
+  {
     object=new RequestTree(Type::SUBJECT,objectFound);
+    object->realword=supposedobject;
+  }
     
 }
 
@@ -81,7 +91,6 @@ word RequestTree::compact(Functions* func)
 
 string RequestTree::stringify(Dictionary* dico)
 {
-  //TODO Add extra string to save real word/
   string res;
   switch(this->mytype)
   {
@@ -127,31 +136,96 @@ string Transformator::reformulation(RequestTree rt)
 
 string Transformator::reformulation(string req)
 {
-  //parse and add tags (save tag)
-  //build request
-  //call reformulation
+  //TODO check req is valid?
+  string prepare;
+  unsigned int t=req.size();
+  string ent;
+  for(unsigned int i=0;i<t;i++)
+  {
+    switch(req[i])
+    {
+      case '(':
+      case ',':
+      case ')':
+	prepare+=req[i];
+	break;
+      default:
+	ent=req[i];
+	while((req[i+1]!=',')||(req[i+1]!=')'))
+	{
+	  i++;
+	  ent+=req[i];
+	}
+	prepare+=this->wordToTagOrWord(ent);
+    }
+  }
+  //TODO build request
+  //TODO call reformulation
 }
 
 
 string Transformator::stringify(RequestTree rt)
 {
   string prefinal=rt.stringify(this->dico);
+  string final;
   unsigned int t=prefinal.size();
   for(unsigned int i=0;i<t;i++)
   {
     if(prefinal[i]=='#')
     {
       string tag;
-      unsigned int j=i;
-      j++;
-      while((prefinal[j]!=',')||(prefinal[j]!=')'))
+      while((prefinal[i+1]!=',')||(prefinal[i+1]!=')'))
       {
-	tag+=prefinal[j];
-	j++;
+	i++;
+	tag+=prefinal[i];
       }
-    //replace tag here  
+      final+=this->tagToWord(tag);
+      this->tags[tag];
     }
+    else final+=prefinal[i];
   }
-  //parse and remove tags
 }
 
+string Transformator::wordToTagOrWord(string entity)
+{
+  if(entity=="?")return "#UNKOWN1";
+  for(unsigned short loop=0;loop < entity.size();loop++)
+    entity[loop]=tolower(entity[loop]);
+  if(dico->isInDictionary(entity))return entity;
+  regex isNumber("\\d*(\\.(\\d)*)?");
+  if(regex_match(entity,isNumber))
+  {
+    if(tags["VALUE1"]==""||tags["VALUE1"]==entity)
+    {
+      tags["VALUE1"]=entity;
+      return "#VALUE1";
+    }
+    if(tags["VALUE2"]==""||tags["VALUE2"]==entity)
+    {
+      tags["VALUE2"]=entity;
+      return "#VALUE2";
+    }
+    tags["VALUE3"]=entity;
+    return "#VALUE3";
+  }
+  if(tags["NAME1"]==""||tags["NAME1"]==entity)
+    {
+      tags["NAME1"]=entity;
+      return "#NAME1";
+    }
+    if(tags["NAME2"]==""||tags["NAME2"]==entity)
+    {
+      tags["NAME2"]=entity;
+      return "#NAME2";
+    }
+    tags["NAME3"]=entity;
+    return "#NAME3";
+}
+
+string Transformator::tagToWord(string tag)
+{
+  if(tags[tag]!="")return tags[tag];
+  if(tag.find("UNKOWN")!=string::npos)return "?";
+  if(tag.find("NAME")!=string::npos)return "NAME";
+  if(tag.find("VALUE")!=string::npos)return "VALUE";
+}

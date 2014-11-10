@@ -25,6 +25,7 @@ public:
   string findnearestSubject(Request req);
   string findnearestObject(Request req);
   string findnearestPredicate(Request req);
+  bool isInDictionary(string entry);
 private:
   void parseClexLine(char* line);
   void addQuotedWord(char* line);
