@@ -139,7 +139,8 @@ RequestTree::RequestTree(string input, Dictionary* dico, RequestTree::Type suppo
   t=input.size();
   i=1;
   int counter=0;
-  string preparesubject,prepareobject;
+  string preparesubject;
+  string prepareobject;
   while((i<t)&&((counter!=0) || (input[i]!=',')))
   {
     if(input[i]=='(')counter++;
@@ -149,7 +150,7 @@ RequestTree::RequestTree(string input, Dictionary* dico, RequestTree::Type suppo
     i++;
   }
   if(i==t)
-    throw "Input Format error: premature end, check it"
+    throw "Input Format error: premature end, check it";
   preparesubject=input.substr(1,i-2);
   i++;
   j=i;

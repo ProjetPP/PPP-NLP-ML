@@ -9,12 +9,14 @@
 #include "Functions.h"
 #include <pthread.h>
 #include <ctime>
+#include "Transformator.h"
 
 using namespace std;
 
 
 Dictionary dico;
 Functions functions;
+Transformator transformator(&functions,&dico,0.1f);
 
 inline bool fileExists (const std::string& name) {
     ifstream f(name.c_str());
@@ -45,6 +47,16 @@ void save()
 {
   dico.save("dictionnary.txt");
   functions.save("functions.txt");
+}
+
+void setLearningprecision(float delta)
+{
+  transformator=Transformator(&functions,&dico,delta);
+}
+
+string reformulation(string input)
+{
+  return transformator.reformulation(input);
 }
 
 /*int main(int argc, char* argv[])
@@ -93,6 +105,27 @@ reformulation_save(PyObject *self, PyObject *args)
   return Py_True;
 }
 
+static PyObject *
+reformulation_setDelta(PyObject *self, PyObject *args)
+{
+  float delta;
+  if (!PyArg_ParseTuple(args, "f",&delta))
+        return NULL;
+  setLearningprecision(delta);
+  return Py_True;
+}
+
+static PyObject *
+reformulation_reformulation(PyObject *self, PyObject *args)
+{
+  const char *entry;
+  if (!PyArg_ParseTuple(args, "s",entry))
+        return NULL;
+  string req=entry;
+  delete entry;
+  return PyUnicode_FromString(reformulation(req).c_str());
+}
+
 
 
 struct module_state {
@@ -112,6 +145,8 @@ static PyMethodDef reformulation_methods[] = {
     {"error_out", (PyCFunction)error_out, METH_NOARGS, NULL},
     {"init",  reformulation_init, METH_VARARGS,"First method you should call."},
     {"save",  reformulation_save, METH_VARARGS,"Saving is important."},
+    {"setDelta",  reformulation_setDelta, METH_VARARGS,"Set delta factor for uncompact."},
+    {"reformule",  reformulation_reformulation, METH_VARARGS,"Reformulate a request tree."},
     {NULL, NULL}
 };
 
