@@ -188,5 +188,5 @@ float dmin=numeric_limits<float>::infinity();
 
 bool Dictionary::isInDictionary(string entry)
 {
-  return content.find(entry)==content.end();
+  return content.find(entry)!=content.end();
 }

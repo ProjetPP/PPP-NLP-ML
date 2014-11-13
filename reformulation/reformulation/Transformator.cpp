@@ -112,6 +112,7 @@ string RequestTree::stringify(Dictionary* dico)
       if(realword!="")return realword;
       return dico->findnearestSubject(this->data);
   }
+  return "";//should not happend
 }
 
 SimplifiedRequestTree* RequestTree::getSimplifiedRequestTree()
@@ -128,7 +129,7 @@ RequestTree::RequestTree(string input, Dictionary* dico, RequestTree::Type suppo
   if(input[0]!='(')
   {
     this->realword=input;
-    this->mytype==supposedType;
+    this->mytype=supposedType;
     if(this->mytype==Type::PREDICATE)
       throw "Unexpected error predicate is a tree"; //Safe cheking
     data=(*dico)[input];
@@ -151,7 +152,7 @@ RequestTree::RequestTree(string input, Dictionary* dico, RequestTree::Type suppo
   }
   if(i==t)
     throw "Input Format error: premature end, check it";
-  preparesubject=input.substr(1,i-2);
+  preparesubject=input.substr(1,i-1);
   i++;
   j=i;
   while((i<t)&&(input[i]!=','))
@@ -162,7 +163,7 @@ RequestTree::RequestTree(string input, Dictionary* dico, RequestTree::Type suppo
   }
   if(i==t)
     throw "Input Format error: premature end, check it";
-  realword=input.substr(j,i-j-1);
+  realword=input.substr(j,i-j);
   data=(*dico)[realword];
   i++;
   j=i;
@@ -174,7 +175,7 @@ RequestTree::RequestTree(string input, Dictionary* dico, RequestTree::Type suppo
       throw "Input Format error: extra ) found, check it";
     i++;
   }
-  prepareobject=input.substr(j,i-j-1);
+  prepareobject=input.substr(j,i-j);
   if(i+1!=t)
     throw "Input Format error: extra caracters found, check it";
   subject=new RequestTree(preparesubject,dico,Type::SUBJECT);
@@ -190,13 +191,13 @@ func(functions),dico(dictionary),delta(precision)
 string Transformator::reformulation(RequestTree rt)
 {
     word cmp =rt.compact(this->func);
-    RequestTree result(cmp,this->func,this->dico,this->delta);
-    return this->stringify(result);
+    return this->stringify(new RequestTree(cmp,this->func,this->dico,this->delta));
 }
 
 string Transformator::reformulation(string req)
 {
   //TODO check req is valid?
+  this->tags.clear();
   string prepare;
   unsigned int t=req.size();
   string ent;
@@ -211,7 +212,7 @@ string Transformator::reformulation(string req)
 	break;
       default:
 	ent=req[i];
-	while((req[i+1]!=',')||(req[i+1]!=')'))
+	while((req[i+1]!=',')&&(req[i+1]!=')'))
 	{
 	  i++;
 	  ent+=req[i];
@@ -219,13 +220,13 @@ string Transformator::reformulation(string req)
 	prepare+=this->wordToTagOrWord(ent);
     }
   }
-  this->reformulation(RequestTree(prepare,dico));
+  return this->reformulation(RequestTree(prepare,dico));
 }
 
 
-string Transformator::stringify(RequestTree rt)
+string Transformator::stringify(RequestTree* rt)
 {
-  string prefinal=rt.stringify(this->dico);
+  string prefinal=rt->stringify(this->dico);
   string final;
   unsigned int t=prefinal.size();
   for(unsigned int i=0;i<t;i++)
@@ -243,6 +244,8 @@ string Transformator::stringify(RequestTree rt)
     }
     else final+=prefinal[i];
   }
+  delete rt;
+  return final;
 }
 
 string Transformator::wordToTagOrWord(string entity)
@@ -251,7 +254,8 @@ string Transformator::wordToTagOrWord(string entity)
   for(unsigned short loop=0;loop < entity.size();loop++)
     entity[loop]=tolower(entity[loop]);
   if(dico->isInDictionary(entity))return entity;
-  regex isNumber("\\d*(\\.(\\d)*)?");
+  //TODO recognize numbers
+  /*regex isNumber("\\d*(\\.(\\d)*)?");
   if(regex_match(entity,isNumber))
   {
     if(tags["VALUE1"]==""||tags["VALUE1"]==entity)
@@ -266,7 +270,7 @@ string Transformator::wordToTagOrWord(string entity)
     }
     tags["VALUE3"]=entity;
     return "#VALUE3";
-  }
+  }*/
   if(tags["NAME1"]==""||tags["NAME1"]==entity)
     {
       tags["NAME1"]=entity;
@@ -287,4 +291,39 @@ string Transformator::tagToWord(string tag)
   if(tag.find("UNKOWN")!=string::npos)return "?";
   if(tag.find("NAME")!=string::npos)return "NAME";
   if(tag.find("VALUE")!=string::npos)return "VALUE";
+  return "ERROR";//should not happend
+}
+
+  
+RequestTree Transformator::testmakerequest(string req)
+{
+  return RequestTree(req,this->dico);
+}
+
+string Transformator::testtaginput(string req)
+{
+  this->tags.clear();
+  string prepare;
+  unsigned int t=req.size();
+  string ent;
+  for(unsigned int i=0;i<t;i++)
+  {
+    switch(req[i])
+    {
+      case '(':
+      case ',':
+      case ')':
+	prepare+=req[i];
+	break;
+      default:
+	ent=req[i];
+	while((req[i+1]!=',')&&(req[i+1]!=')'))
+	{
+	  i++;
+	  ent+=req[i];
+	}
+	prepare+=this->wordToTagOrWord(ent);
+    }
+  }
+  return prepare;
 }

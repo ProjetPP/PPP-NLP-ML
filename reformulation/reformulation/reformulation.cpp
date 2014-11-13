@@ -39,8 +39,11 @@ bool init()
   else
     dico.load("dictionnary.txt");
   if(fileExists("functions.txt"))
+  {
     if(!functions.load("functions.txt"))
       return false;
+  }
+  return true;
 }
 
 void save()
@@ -119,14 +122,39 @@ static PyObject *
 reformulation_reformulation(PyObject *self, PyObject *args)
 {
   const char *entry;
-  if (!PyArg_ParseTuple(args, "s",entry))
+  if (!PyArg_ParseTuple(args, "s",&entry))
         return NULL;
   string req=entry;
-  delete entry;
+  //delete entry;
   return PyUnicode_FromString(reformulation(req).c_str());
 }
 
+static PyObject *
+reformulation_testtag(PyObject *self, PyObject *args)
+{
+  const char *entry;
+  cout<<"coucou"<<endl;
+  if (!PyArg_ParseTuple(args, "s",&entry))
+        return NULL;
+  cout<<"Request is "<<entry<<endl;
+  string req=entry;
+  string res=transformator.testtaginput(req);
+  //delete entry;
+  return PyUnicode_FromString(res.c_str());
+}
 
+static PyObject *
+reformulation_testreq(PyObject *self, PyObject *args)
+{
+  const char *entry;
+  if (!PyArg_ParseTuple(args, "s",&entry))
+        return NULL;
+  
+  string req=entry;
+  //delete entry;
+  transformator.testmakerequest(req);
+  return Py_True;
+}
 
 struct module_state {
     PyObject *error;
@@ -147,6 +175,8 @@ static PyMethodDef reformulation_methods[] = {
     {"save",  reformulation_save, METH_VARARGS,"Saving is important."},
     {"setDelta",  reformulation_setDelta, METH_VARARGS,"Set delta factor for uncompact."},
     {"reformule",  reformulation_reformulation, METH_VARARGS,"Reformulate a request tree."},
+    {"testtag",  reformulation_testtag, METH_VARARGS,"Test tag."},
+    {"testreq",  reformulation_testreq, METH_VARARGS,"Test req."},
     {NULL, NULL}
 };
 

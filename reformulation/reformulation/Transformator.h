@@ -49,8 +49,11 @@ public:
   string reformulation(string req);
   string reformulation(RequestTree rt);
   
+  string testtaginput(string req);
+  RequestTree testmakerequest(string req);
+  
 private:
-  string stringify(RequestTree rt);
+  string stringify(RequestTree* rt);
   string wordToTagOrWord(string entity);
   string tagToWord(string tag);
   map<string,string> tags;
