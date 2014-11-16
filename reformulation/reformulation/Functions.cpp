@@ -204,7 +204,9 @@ word Functions::compact(Request r)
     pthread_join(tid[i], NULL);
   }
 
-  return data[0].result+data[1].result+data[2].result;
+  word w=data[0].result+data[1].result+data[2].result;
+  normalizeWord(w);
+  return w;
 }
 
 Request Functions::uncompact(word w)

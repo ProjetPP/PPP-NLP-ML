@@ -15,6 +15,9 @@ subject(vector<float>(WORDSIZE,0)), object(vector<float>(WORDSIZE,0)), predicate
     subject[i]=(static_cast<float>(rand()%2000))/1000.0f-1.0f;
     object[i]=(static_cast<float>(rand()%2000))/1000.0f-1.0f;
   }
+  normalizeWord(predicate);
+  normalizeWord(object);
+  normalizeWord(subject);
 }
 
 Request::Request(int invalid) :
@@ -26,6 +29,9 @@ subject(vector<float>(0)), object(vector<float>(0)), predicate(vector<float>(0))
 Request::Request(word subject_, word predicate_, word object_):
 subject(subject_), object(object_), predicate(predicate_)
 {
+  normalizeWord(subject);
+  normalizeWord(object);
+  normalizeWord(predicate);
 }
 
 Request::Request(bool nulconstructor) :
@@ -158,6 +164,7 @@ void Request::reset()
 }
 
 
+
 float Request::getTransformedDistancePredicate(Request& r, float limit) const
 {
   float sum=0.0f;
@@ -198,4 +205,20 @@ float Request::getTransformedDistanceSubject(Request& r, float limit) const
       return numeric_limits<float>::infinity();
   }
 return sum;
+}
+
+
+void normalizeWord(word& w)
+{
+  float sum=0.0f;
+  for(long unsigned int i=0;i<WORDSIZE;i++)
+  {
+    sum+=w[i]*w[i];
+  }
+  sum/=WORDSIZE;
+  sum=sqrt(sum);
+  for(long unsigned int i=0;i<WORDSIZE;i++)
+  {
+    w[i]/=sum;
+  }
 }

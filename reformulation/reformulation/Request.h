@@ -56,4 +56,6 @@ istream& operator>>(istream& is,Request& req);
 word& operator+=(word& w1,word w2);
 word operator+(word w1,word w2);
 
+void normalizeWord(word& w);
+
 #endif

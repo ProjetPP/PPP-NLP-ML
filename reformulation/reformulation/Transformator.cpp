@@ -51,6 +51,14 @@ RequestTree::~RequestTree()
   }
 }
 
+ostream& operator<<(ostream& in, word w)
+{
+  for(int i=0;i<WORDSIZE;i++)
+    in<<w[i]<<' ';
+  in<<endl;
+  return in;
+};
+
 RequestTree::RequestTree(word data,Functions* func,Dictionary* dico,float delta):
 realword("")
 {
@@ -62,6 +70,8 @@ realword("")
   Request subjectFound=(*dico)[supposedsubject];
   string supposedobject=dico->findnearestObject(req);
   Request objectFound=(*dico)[supposedobject];
+  
+  //cout<<data<<endl;
   
   if(subjectFound.getDistance2subject(req)>delta)
     subject=new RequestTree(req.getSubject(),func,dico,delta*NOTINFINITERECONSTRUCTIONFACTOR);
@@ -248,6 +258,23 @@ string Transformator::stringify(RequestTree* rt)
   return final;
 }
 
+bool recognizeNumber(string input)
+{
+  unsigned int i,t;
+  t=input.size();
+  bool partiedecimale=false;
+  for(i=0;i<t;i++)
+  {
+    if(partiedecimale&&input[i]=='.')
+      return false;
+    if(input[i]=='.')
+      partiedecimale=true;
+    if(input[i]<'0'||input[i]>'9')
+      return false;
+  }
+  return true;
+}
+
 string Transformator::wordToTagOrWord(string entity)
 {
   if(entity=="?")return "#UNKOWN1";
@@ -255,8 +282,8 @@ string Transformator::wordToTagOrWord(string entity)
     entity[loop]=tolower(entity[loop]);
   if(dico->isInDictionary(entity))return entity;
   //TODO recognize numbers
-  /*regex isNumber("\\d*(\\.(\\d)*)?");
-  if(regex_match(entity,isNumber))
+  //regex isNumber("\\d*(\\.(\\d)*)?");
+  if(recognizeNumber(entity))
   {
     if(tags["VALUE1"]==""||tags["VALUE1"]==entity)
     {
@@ -270,7 +297,7 @@ string Transformator::wordToTagOrWord(string entity)
     }
     tags["VALUE3"]=entity;
     return "#VALUE3";
-  }*/
+  }
   if(tags["NAME1"]==""||tags["NAME1"]==entity)
     {
       tags["NAME1"]=entity;
