@@ -190,3 +190,9 @@ bool Dictionary::isInDictionary(string entry)
 {
   return content.find(entry)!=content.end();
 }
+
+void Dictionary::translateWord(string entry, Request d)
+{
+  content[entry]+=d;
+}
+

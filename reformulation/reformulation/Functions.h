@@ -39,6 +39,8 @@ private:
   vector<float> gradMergeMatrix;
   vector<float> gradCompactMatrix;
   vector<float> gradUncompactMatrix;
+  
+  friend class Trainer;
 };
 
 struct vectorMatrixData

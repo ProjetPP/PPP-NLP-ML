@@ -50,7 +50,9 @@ public:
   string reformulation(RequestTree rt);
   
   string testtaginput(string req);
-  RequestTree testmakerequest(string req);
+  RequestTree Makerequest(string req);
+  
+  void setDelta(float delta);
   
 private:
   string stringify(RequestTree* rt);

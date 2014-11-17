@@ -10,6 +10,7 @@
 #include <pthread.h>
 #include <ctime>
 #include "Transformator.h"
+#include "Trainer.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ using namespace std;
 Dictionary dico;
 Functions functions;
 Transformator transformator(&functions,&dico,0.1f);
+Trainer trainer(&dico,&functions,0.1f);
 
 inline bool fileExists (const std::string& name) {
     ifstream f(name.c_str());
@@ -54,7 +56,8 @@ void save()
 
 void setLearningprecision(float delta)
 {
-  transformator=Transformator(&functions,&dico,delta);
+  transformator.setDelta(delta);
+  trainer.setDelta(delta);
 }
 
 string reformulation(string input)
@@ -62,31 +65,6 @@ string reformulation(string input)
   return transformator.reformulation(input);
 }
 
-/*int main(int argc, char* argv[])
-{
-  (void) argc;
-  (void) argv;
-  Dictionary dico;
-  dico.initializeFromClex("clex_lexicon.pl");
-  //dico.save("dictionnary.txt");
-  //dico.load("dictionnary.txt");
-  Functions functions;
-  //functions.load("functions.txt");
-   clock_t begin = clock();
-  for(int i=0;i<10000;i++)
-  {
-    Request r1(0),r2(0);
-    r1=dico["monkey"];
-    r2=dico["lives"];
-    
-    Request r3=functions.merge(r1,r2);
-  }
-  clock_t end = clock();
-  cout<<difftime(end,begin)<<endl;
-  
-  pthread_exit(0);
-  return 0;
-}*/
 
 static PyObject *
 reformulation_init(PyObject *self, PyObject *args)
@@ -144,15 +122,35 @@ reformulation_testtag(PyObject *self, PyObject *args)
 }
 
 static PyObject *
-reformulation_testreq(PyObject *self, PyObject *args)
+reformulation_traincompact(PyObject *self, PyObject *args)
+{
+  if (!PyArg_ParseTuple(args, ""))
+        return NULL;
+  
+  trainer.trainCompact();
+  return Py_True;
+}
+
+static PyObject *
+reformulation_trainuncompact(PyObject *self, PyObject *args)
+{
+  if (!PyArg_ParseTuple(args, ""))
+        return NULL;
+  
+  trainer.trainUncompact();
+  return Py_True;
+}
+
+static PyObject *
+reformulation_trainword(PyObject *self, PyObject *args)
 {
   const char *entry;
-  if (!PyArg_ParseTuple(args, "s",&entry))
+  if (!PyArg_ParseTuple(args, "",&entry))
         return NULL;
   
   string req=entry;
   //delete entry;
-  transformator.testmakerequest(req);
+  trainer.trainWord(req);
   return Py_True;
 }
 
@@ -176,7 +174,9 @@ static PyMethodDef reformulation_methods[] = {
     {"setDelta",  reformulation_setDelta, METH_VARARGS,"Set delta factor for uncompact."},
     {"reformule",  reformulation_reformulation, METH_VARARGS,"Reformulate a request tree."},
     {"testtag",  reformulation_testtag, METH_VARARGS,"Test tag."},
-    {"testreq",  reformulation_testreq, METH_VARARGS,"Test req."},
+    {"trainCompact",  reformulation_traincompact, METH_VARARGS,"Train function Compact"},
+    {"trainUncompact",  reformulation_trainuncompact, METH_VARARGS,"Train function Uncompact"},
+    {"trainWord",  reformulation_trainword, METH_VARARGS,"Train a word placement"},
     {NULL, NULL}
 };
 

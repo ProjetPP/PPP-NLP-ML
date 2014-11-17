@@ -322,9 +322,32 @@ string Transformator::tagToWord(string tag)
 }
 
   
-RequestTree Transformator::testmakerequest(string req)
+RequestTree Transformator::Makerequest(string req)
 {
-  return RequestTree(req,this->dico);
+  this->tags.clear();
+  string prepare;
+  unsigned int t=req.size();
+  string ent;
+  for(unsigned int i=0;i<t;i++)
+  {
+    switch(req[i])
+    {
+      case '(':
+      case ',':
+      case ')':
+	prepare+=req[i];
+	break;
+      default:
+	ent=req[i];
+	while((req[i+1]!=',')&&(req[i+1]!=')'))
+	{
+	  i++;
+	  ent+=req[i];
+	}
+	prepare+=this->wordToTagOrWord(ent);
+    }
+  }
+  return RequestTree(prepare,this->dico);
 }
 
 string Transformator::testtaginput(string req)
@@ -354,3 +377,9 @@ string Transformator::testtaginput(string req)
   }
   return prepare;
 }
+
+void Transformator::setDelta(float d)
+{
+  this->delta=d;
+}
+
