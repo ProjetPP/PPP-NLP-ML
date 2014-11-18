@@ -111,10 +111,8 @@ static PyObject *
 reformulation_testtag(PyObject *self, PyObject *args)
 {
   const char *entry;
-  cout<<"coucou"<<endl;
   if (!PyArg_ParseTuple(args, "s",&entry))
         return NULL;
-  cout<<"Request is "<<entry<<endl;
   string req=entry;
   string res=transformator.testtaginput(req);
   //delete entry;
