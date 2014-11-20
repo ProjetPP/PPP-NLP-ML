@@ -69,6 +69,7 @@ string reformulation(string input)
 static PyObject *
 reformulation_init(PyObject *self, PyObject *args)
 {
+  (void) self;
   if (!PyArg_ParseTuple(args, ""))
         return NULL;
   if(init())
@@ -80,6 +81,7 @@ reformulation_init(PyObject *self, PyObject *args)
 static PyObject *
 reformulation_save(PyObject *self, PyObject *args)
 {
+  (void) self;
   if (!PyArg_ParseTuple(args, ""))
         return NULL;
   save();
@@ -90,6 +92,7 @@ static PyObject *
 reformulation_setDelta(PyObject *self, PyObject *args)
 {
   float delta;
+  (void) self;
   if (!PyArg_ParseTuple(args, "f",&delta))
         return NULL;
   setLearningprecision(delta);
@@ -100,6 +103,7 @@ static PyObject *
 reformulation_reformulation(PyObject *self, PyObject *args)
 {
   const char *entry;
+  (void) self;
   if (!PyArg_ParseTuple(args, "s",&entry))
         return NULL;
   string req=entry;
@@ -111,6 +115,7 @@ static PyObject *
 reformulation_testtag(PyObject *self, PyObject *args)
 {
   const char *entry;
+  (void) self;
   if (!PyArg_ParseTuple(args, "s",&entry))
         return NULL;
   string req=entry;
@@ -122,6 +127,7 @@ reformulation_testtag(PyObject *self, PyObject *args)
 static PyObject *
 reformulation_traincompact(PyObject *self, PyObject *args)
 {
+  (void) self;
   if (!PyArg_ParseTuple(args, ""))
         return NULL;
   
@@ -132,6 +138,7 @@ reformulation_traincompact(PyObject *self, PyObject *args)
 static PyObject *
 reformulation_trainuncompact(PyObject *self, PyObject *args)
 {
+  (void) self;
   if (!PyArg_ParseTuple(args, ""))
         return NULL;
   
@@ -143,6 +150,7 @@ static PyObject *
 reformulation_trainword(PyObject *self, PyObject *args)
 {
   const char *entry;
+  (void) self;
   if (!PyArg_ParseTuple(args, "",&entry))
         return NULL;
   
@@ -175,7 +183,7 @@ static PyMethodDef reformulation_methods[] = {
     {"trainCompact",  reformulation_traincompact, METH_VARARGS,"Train function Compact"},
     {"trainUncompact",  reformulation_trainuncompact, METH_VARARGS,"Train function Uncompact"},
     {"trainWord",  reformulation_trainword, METH_VARARGS,"Train a word placement"},
-    {NULL, NULL}
+    {NULL, NULL, 0, NULL}
 };
 
 static int reformulation_traverse(PyObject *m, visitproc visit, void *arg) {
