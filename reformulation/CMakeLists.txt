@@ -12,7 +12,8 @@ add_library(reformulation SHARED
   reformulation/Dictionary.cpp
   reformulation/Functions.cpp
   reformulation/Transformator.cpp
-  reformulation/Trainer.cpp)
+  reformulation/Trainer.cpp
+  reformulation/pyext.cpp)
 find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
 target_link_libraries(reformulation pthread ${PYTHON_LIBRARIES})
