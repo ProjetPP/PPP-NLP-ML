@@ -18,4 +18,16 @@ find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
 target_link_libraries(reformulation pthread ${PYTHON_LIBRARIES})
 
+project(phprefor)
+add_library(phprefor SHARED
+  reformulation/reformulation.cpp
+  reformulation/Request.cpp
+  reformulation/Dictionary.cpp
+  reformulation/Functions.cpp
+  reformulation/Transformator.cpp
+  reformulation/Trainer.cpp
+  reformulation/phpext.cpp)
+
+
+target_link_libraries(phprefor pthread phpcpp)
 #install(TARGETS reformulation RUNTIME DESTINATION bin)
