@@ -24,7 +24,7 @@ reformulation_save()
 void
 reformulation_setDelta(Php::Parameters &params)
 {
-  float delta=static_cast<double>(params[0]);
+  float delta=static_cast<float>(static_cast<double>(params[0]));
   setLearningprecision(delta);
 }
 
@@ -60,7 +60,7 @@ extern "C" {
         extension.add("reformulation_init", reformulation_init);
 	extension.add("reformulation_save", reformulation_save);
 	extension.add("reformulation_setDelta", reformulation_setDelta,{Php::ByVal("input",Php::Type::Float)});
-	extension.add("reformulation_reformulation", reformulation_reformulation,{Php::ByVal("input",Php::Type::String)});
+	extension.add("reformulation_reformulation", reformulation_reformulation,{Php::ByVal("input",Php::Type::Numeric)});
 	extension.add("reformulation_testtag", reformulation_testtag,{Php::ByVal("input",Php::Type::String)});
         
         // return the extension

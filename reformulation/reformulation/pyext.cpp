@@ -6,6 +6,7 @@ using namespace std;
 static PyObject *
 reformulation_init(PyObject *self, PyObject *args)
 {
+  (void)self;
   if (!PyArg_ParseTuple(args, ""))
         return NULL;
   if(init())
@@ -17,6 +18,7 @@ reformulation_init(PyObject *self, PyObject *args)
 static PyObject *
 reformulation_save(PyObject *self, PyObject *args)
 {
+  (void)self;
   if (!PyArg_ParseTuple(args, ""))
         return NULL;
   save();
@@ -26,6 +28,7 @@ reformulation_save(PyObject *self, PyObject *args)
 static PyObject *
 reformulation_setDelta(PyObject *self, PyObject *args)
 {
+  (void)self;
   float delta;
   if (!PyArg_ParseTuple(args, "f",&delta))
         return NULL;
@@ -36,6 +39,7 @@ reformulation_setDelta(PyObject *self, PyObject *args)
 static PyObject *
 reformulation_reformulation(PyObject *self, PyObject *args)
 {
+  (void)self;
   const char *entry;
   if (!PyArg_ParseTuple(args, "s",&entry))
         return NULL;
@@ -47,6 +51,7 @@ reformulation_reformulation(PyObject *self, PyObject *args)
 static PyObject *
 reformulation_testtag(PyObject *self, PyObject *args)
 {
+  (void)self;
   const char *entry;
   if (!PyArg_ParseTuple(args, "s",&entry))
         return NULL;

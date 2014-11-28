@@ -281,7 +281,6 @@ string Transformator::wordToTagOrWord(string entity)
   for(unsigned short loop=0;loop < entity.size();loop++)
     entity[loop]=static_cast<char>(tolower(entity[loop]));
   if(dico->isInDictionary(entity))return entity;
-  //TODO recognize numbers
   //regex isNumber("\\d*(\\.(\\d)*)?");
   if(recognizeNumber(entity))
   {
