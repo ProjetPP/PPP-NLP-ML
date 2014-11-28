@@ -12,3 +12,6 @@ cd vienneCL
 #sudo make install
 #cd ../..
 #rm vienneCL -r -f
+
+git clone git@github.com:CopernicaMarketingSoftware/PHP-CPP.git
+cd PHP-CPP
