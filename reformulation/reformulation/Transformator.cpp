@@ -27,8 +27,8 @@ SimplifiedRequestTree::~SimplifiedRequestTree()
 }
 
 
-RequestTree::RequestTree(RequestTree::Type type, Request data):
-mytype(type),data(data),realword("")
+RequestTree::RequestTree(RequestTree::Type type, Request data_):
+mytype(type),data(data_),realword("")
 {
   if(type==Type::PREDICATE)
     throw std::exception();//bad constructor
@@ -57,21 +57,21 @@ ostream& operator<<(ostream& in, word w)
     in<<w[i]<<' ';
   in<<endl;
   return in;
-};
+}
 
-RequestTree::RequestTree(word data,Functions* func,Dictionary* dico,float delta):
+RequestTree::RequestTree(word data_,Functions* func,Dictionary* dico,float delta):
 realword("")
 {
   mytype=Type::PREDICATE;
-  Request req=func->uncompact(data);
+  Request req=func->uncompact(data_);
   realword=dico->findnearestPredicate(req);
-  this->data=(*dico)[realword];
+  data=(*dico)[realword];
   string supposedsubject=dico->findnearestSubject(req);
   Request subjectFound=(*dico)[supposedsubject];
   string supposedobject=dico->findnearestObject(req);
   Request objectFound=(*dico)[supposedobject];
   
-  //cout<<data<<endl;
+  //cout<<data_<<endl;
   
   if(subjectFound.getDistance2subject(req)>delta)
     subject=new RequestTree(req.getSubject(),func,dico,delta*NOTINFINITERECONSTRUCTIONFACTOR);
@@ -146,7 +146,7 @@ RequestTree::RequestTree(string input, Dictionary* dico, RequestTree::Type suppo
     return;
   }
   mytype=Type::PREDICATE;
-  unsigned int i,t,j;
+  long unsigned int i,t,j;
   t=input.size();
   i=1;
   int counter=0;
@@ -209,9 +209,9 @@ string Transformator::reformulation(string req)
   //TODO check req is valid?
   this->tags.clear();
   string prepare;
-  unsigned int t=req.size();
+  long unsigned int t=req.size();
   string ent;
-  for(unsigned int i=0;i<t;i++)
+  for(long unsigned int i=0;i<t;i++)
   {
     switch(req[i])
     {
@@ -238,7 +238,7 @@ string Transformator::stringify(RequestTree* rt)
 {
   string prefinal=rt->stringify(this->dico);
   string final;
-  unsigned int t=prefinal.size();
+  long unsigned int t=prefinal.size();
   for(unsigned int i=0;i<t;i++)
   {
     if(prefinal[i]=='#')
@@ -260,7 +260,7 @@ string Transformator::stringify(RequestTree* rt)
 
 bool recognizeNumber(string input)
 {
-  unsigned int i,t;
+  long unsigned int i,t;
   t=input.size();
   bool partiedecimale=false;
   for(i=0;i<t;i++)
@@ -279,7 +279,7 @@ string Transformator::wordToTagOrWord(string entity)
 {
   if(entity=="?")return "#UNKOWN1";
   for(unsigned short loop=0;loop < entity.size();loop++)
-    entity[loop]=tolower(entity[loop]);
+    entity[loop]=static_cast<char>(tolower(entity[loop]));
   if(dico->isInDictionary(entity))return entity;
   //TODO recognize numbers
   //regex isNumber("\\d*(\\.(\\d)*)?");
@@ -326,9 +326,9 @@ RequestTree Transformator::Makerequest(string req)
 {
   this->tags.clear();
   string prepare;
-  unsigned int t=req.size();
+  long unsigned int t=req.size();
   string ent;
-  for(unsigned int i=0;i<t;i++)
+  for(long unsigned int i=0;i<t;i++)
   {
     switch(req[i])
     {
@@ -354,9 +354,9 @@ string Transformator::testtaginput(string req)
 {
   this->tags.clear();
   string prepare;
-  unsigned int t=req.size();
+  long unsigned int t=req.size();
   string ent;
-  for(unsigned int i=0;i<t;i++)
+  for(long unsigned int i=0;i<t;i++)
   {
     switch(req[i])
     {

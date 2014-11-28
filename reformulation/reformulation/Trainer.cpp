@@ -4,7 +4,7 @@
 #include <sstream>
 #include <fstream>
 
-Trainer::Trainer(Dictionary* dico, Functions* func,float delta):transfo(new Transformator(func,dico,delta)),delta(delta),intensity(delta/10),func(func),dico(dico)
+Trainer::Trainer(Dictionary* dico_, Functions* func_,float delta_):transfo(new Transformator(func_,dico_,delta)),delta(delta_),intensity(delta_/10),func(func_),dico(dico_)
 {
 
 }
@@ -115,7 +115,7 @@ void Trainer::trainUncompact()
 void Trainer::masscomputing(string file)
 {
   ofstream os(file);
-  unsigned int i,t;
+  long unsigned int i,t;
   t=trainingSet.size();
   for (i=0;i<t;i++)
   {

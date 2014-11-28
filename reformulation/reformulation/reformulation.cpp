@@ -65,10 +65,5 @@ string reformulation(string input)
   return transformator.reformulation(input);
 }
 
-string testtag(string input)
-{
-  return transformator.testtaginput(input);
-}
-
 
 
