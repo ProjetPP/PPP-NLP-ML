@@ -112,7 +112,7 @@ static PyMethodDef reformulation_methods[] = {
     //{"trainCompact",  reformulation_traincompact, METH_VARARGS,"Train function Compact"},
     //{"trainUncompact",  reformulation_trainuncompact, METH_VARARGS,"Train function Uncompact"},
     //{"trainWord",  reformulation_trainword, METH_VARARGS,"Train a word placement"},
-    {NULL, NULL}
+    {NULL, NULL, 0, NULL}
 };
 
 static int reformulation_traverse(PyObject *m, visitproc visit, void *arg) {

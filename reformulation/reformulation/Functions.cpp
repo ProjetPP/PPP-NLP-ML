@@ -245,7 +245,7 @@ void Functions::clearGradient()
     gradUncompactMatrix[i]=0;
 }
 
-pair<Request,Request> Functions::BackPropagationMerge(Request inputr1,Request inputr2,Request gradOutput)
+/*pair<Request,Request> Functions::BackPropagationMerge(Request inputr1,Request inputr2,Request gradOutput)
 {
   pthread_t tid[18];
   vectorMatrixData data[18];
@@ -495,4 +495,4 @@ void Functions::accGradUncompact(word input, Request gradOutput, float scale)
       }
       ++itobject;
   }
-}
+}*/

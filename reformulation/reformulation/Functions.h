@@ -19,13 +19,13 @@ public:
   word compact(Request r);
   Request uncompact(word w);
   void clearGradient();
-  pair<Request,Request> BackPropagationMerge(Request inputr1,Request inputr2,Request gradOutput);
+  /*pair<Request,Request> BackPropagationMerge(Request inputr1,Request inputr2,Request gradOutput);
   Request BackPropagationCompact(Request input,word gradOutput);
   word BackPropagationUncompact(word input,Request gradOutput);
   void accumulateGradients();
   void accGradMerge(Request inputr1,Request inputr2,Request gradOutput,float scale);
   void accGradCompact(Request input,word gradOutput,float scale);
-  void accGradUncompact(word input,Request gradOutput,float scale);
+  void accGradUncompact(word input,Request gradOutput,float scale);*/
 private:
   vector<float> mergeMatrix;
   vector<float> compactMatrix;
