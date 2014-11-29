@@ -8,7 +8,7 @@ python:
   - pypy3
 
 install:
-    - apt_get install python3-devel
+    - apt-get install python3-dev
 
 before_script:
   - cd reformulation
