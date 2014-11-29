@@ -5,6 +5,7 @@ ADD_DEFINITIONS(
     -Wall
     -Wextra -pedantic-errors -Werror -Wfatal-errors -Wcast-qual -Wcast-align -Wconversion -Wdouble-promotion -Wfloat-equal -Wshadow -Wpointer-arith -Woverloaded-virtual -Wstrict-aliasing -Wstrict-overflow -Wunsafe-loop-optimizations -Wconversion -Wlogical-op -Wdisabled-optimization -Wunused
     #  -Weffc++ -Wold-style-cast
+    -Wno-unknown-warning-option
 )
 project(reformulation)
 add_library(reformulation SHARED
