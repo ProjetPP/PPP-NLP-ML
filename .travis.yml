@@ -1,0 +1,18 @@
+
+language: python
+
+python:
+  - 3.2
+  - 3.3
+  - 3.4
+  - pypy3
+
+install:
+    - apt_get install python3-devel
+
+before_script:
+  - cd reformulation
+  - wget https://github.com/Attempto/Clex/blob/master/clex_lexicon.pl?raw=true
+  - cmake .
+  - make reformulation
+  
