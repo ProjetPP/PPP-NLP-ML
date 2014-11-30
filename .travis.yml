@@ -12,5 +12,7 @@ before_script:
   - cd reformulation
   - wget https://github.com/Attempto/Clex/blob/master/clex_lexicon.pl?raw=true
   - cmake .
+
+script:
   - make reformulation
   
