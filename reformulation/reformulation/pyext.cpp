@@ -1,6 +1,6 @@
 #include <Python.h>
 //For Travis
-#include <moduleobject.h>const_cast<size_t>
+#include <moduleobject.h>
 
 #include "reformulation.h"
 
