@@ -6,7 +6,9 @@ compiler:
   - gcc
 
 install:
-    - sudo apt-get install python3-dev
+    - echo "deb http://mirrors.kernel.org/ubuntu/ vivid universe" >> /etc/apt/sources.list
+    - sudo apt-get update
+    - sudo apt-get install python3-dev cmake
 
 before_script:
   - cd reformulation
