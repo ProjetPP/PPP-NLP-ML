@@ -4,7 +4,7 @@
 #include <sstream>
 #include <fstream>
 
-Trainer::Trainer(Dictionary* dico_, Functions* func_,float delta_):transfo(new Transformator(func_,dico_,delta)),delta(delta_),intensity(delta_/10),func(func_),dico(dico_)
+Trainer::Trainer(Dictionary* dico_, Functions* func_,float delta_):transfo(new Transformator(func_,dico_,delta_)),delta(delta_),intensity(delta_/10),func(func_),dico(dico_)
 {
 
 }
