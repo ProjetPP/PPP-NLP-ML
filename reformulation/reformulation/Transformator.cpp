@@ -53,7 +53,7 @@ RequestTree::~RequestTree()
 
 ostream& operator<<(ostream& in, word w)
 {
-  for(int i=0;i<WORDSIZE;i++)
+  for(unsigned int i=0;i< static_cast<unsigned int>(WORDSIZE);i++)
     in<<w[i]<<' ';
   in<<endl;
   return in;
