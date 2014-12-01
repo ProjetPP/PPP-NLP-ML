@@ -101,11 +101,9 @@ struct module_state {
     PyObject *error;
 };
 
-#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
-
 static PyObject *
 error_out(PyObject *m) {
-    struct module_state *st = GETSTATE(m);
+    struct module_state *st = ((struct module_state*)PyModule_GetState(m));
     PyErr_SetString(st->error, "something bad happened");
     return NULL;
 }
@@ -124,12 +122,12 @@ static PyMethodDef reformulation_methods[] = {
 };
 
 static int reformulation_traverse(PyObject *m, visitproc visit, void *arg) {
-    Py_VISIT(GETSTATE(m)->error);
+    Py_VISIT(((struct module_state*)PyModule_GetState(m))->error);
     return 0;
 }
 
 static int reformulation_clear(PyObject *m) {
-    Py_CLEAR(GETSTATE(m)->error);
+    Py_CLEAR(((struct module_state*)PyModule_GetState(m))->error);
     return 0;
 }
 
@@ -155,7 +153,7 @@ PyInit_libreformulation(void)
 
     if (module == NULL)
         return NULL;
-    struct module_state *st = GETSTATE(module);
+    struct module_state *st = ((struct module_state*)PyModule_GetState(module));
 
     st->error = PyErr_NewException("reformulation.Error", NULL, NULL);
     if (st->error == NULL) {
