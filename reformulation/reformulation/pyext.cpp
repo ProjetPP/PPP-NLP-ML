@@ -1,4 +1,7 @@
 #include <Python.h>
+//For Travis
+#include <moduleobject.h>
+
 #include "reformulation.h"
 
 using namespace std;
