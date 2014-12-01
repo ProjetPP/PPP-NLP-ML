@@ -36,7 +36,7 @@ void Trainer::trainWord(string w)
       data.push_back(trainingSet[i]);
   }*/
   word empty(WORDSIZE,0);
-  for(int i=0;i<WORDSIZE;i++)
+  for(unsigned int i=0;i< static_cast<unsigned int>(WORDSIZE);i++)
   {
     stringstream ss;
     ss<<"1_"<<i;
@@ -81,7 +81,7 @@ void Trainer::trainWord(string w)
 
 void Trainer::trainCompact()
 {
-  for(int i=0;i<COMPACTSIZE;i++)
+  for(unsigned int i=0;i< static_cast<unsigned int>(COMPACTSIZE);i++)
   {
     stringstream ss;
     ss<<"1_"<<i;
@@ -97,7 +97,7 @@ void Trainer::trainCompact()
 
 void Trainer::trainUncompact()
 {
-  for(int i=0;i<UNCOMPACTSIZE;i++)
+  for(unsigned int i=0;i< static_cast<unsigned int>(UNCOMPACTSIZE);i++)
   {
     stringstream ss;
     ss<<"1_"<<i;
