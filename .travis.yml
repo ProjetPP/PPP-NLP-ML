@@ -12,10 +12,10 @@ install:
     - sudo apt-get install python3-dev
     - cmake --version
     - wget http://mirrors.kernel.org/ubuntu/pool/main/d/dpkg/dpkg_1.17.21ubuntu1_amd64.deb
-    - sudo dpkg -i dpkg*.deb
+    - sudo apt-get install dpkg*.deb
     - wget http://mirrors.kernel.org/ubuntu/pool/main/c/cmake/cmake_3.0.2-1ubuntu2_amd64.deb
     - wget http://mirrors.kernel.org/ubuntu/pool/main/c/cmake/cmake-data_3.0.2-1ubuntu2_all.deb
-    - sudo dpkg -i cmake *.deb
+    - sudo apt-get install cmake *.deb
     - cmake --version
 
 before_script:
