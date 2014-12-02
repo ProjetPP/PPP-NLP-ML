@@ -18,7 +18,7 @@ function getLabelForItemID($itemId) {
 
 	$fingerprint = $entityProvider->getItem($itemId)->getFingerprint();
 	try {
-		return $fingerprint->getLabel($this->getOption(ValueFormatter::OPT_LANG))->getText();
+		return $fingerprint->getLabel('en')->getText();
 	} catch(OutOfBoundsException $e) {
 		return '';
 	}
