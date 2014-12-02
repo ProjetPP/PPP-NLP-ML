@@ -15,3 +15,5 @@ clex*
 *.kdev4
 build
 reformulation/reformulation/reformulation
+learningintegration/instance.txt
+learningintegration/wikidata-instances.nt
