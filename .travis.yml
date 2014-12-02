@@ -6,7 +6,7 @@ compiler:
   - gcc
 
 install:
-    - echo "deb http://mirrors.kernel.org/ubuntu/ vivid universe" >> /etc/apt/sources.list
+    - echo "deb http://mirrors.kernel.org/ubuntu/ vivid universe" | sudo tee -a /etc/apt/sources.list
     - sudo apt-get update
     - sudo apt-get install python3-dev cmake
 
