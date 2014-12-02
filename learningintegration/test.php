@@ -23,3 +23,19 @@ function getLabelForItemID($itemId) {
 		return '';
 	}
 }
+
+function proceed()
+{
+	$in = fopen("instance.txt", 'r');
+	$out = fopen("word", 'w');
+
+	$line=fgets($in);
+
+	while($line=fgets($in))
+	{
+		preg_match_all("#Q[0-9]+#",$line,$matches);
+		fputs($out,"\"".getLabelForItemID($matches[0][0])."\" \"".getLabelForItemID($matches[0][1])."\"\n");
+	}
+}
+
+?>
