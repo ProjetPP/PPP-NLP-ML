@@ -6,7 +6,12 @@ compiler:
   - gcc
 
 install:
+    - echo "yes" | sudo add-apt-repository ppa:kalakris/cmake
+    - sudo apt-get update -qq
     - sudo apt-get install python3-dev
+    - cmake --version
+    - sudo apt-get install cmake
+    - cmake --version
 
 before_script:
   - cd reformulation
