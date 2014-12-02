@@ -10,7 +10,10 @@ install:
     - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
     - sudo apt-get update
     - sudo apt-get install python3-dev
-    - sudo apt-get install cmake=3.0.2-1ubuntu2
+    - cmake --version
+    - wget http://mirrors.kernel.org/ubuntu/pool/main/c/cmake/cmake_3.0.2-1ubuntu2_amd64.deb
+    - wget http://mirrors.kernel.org/ubuntu/pool/main/c/cmake/cmake-data_3.0.2-1ubuntu2_all.deb
+    - sudo dpkg -i cmake *.deb
     - cmake --version
 
 before_script:
