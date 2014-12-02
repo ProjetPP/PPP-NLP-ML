@@ -9,7 +9,7 @@ install:
     - echo "deb http://mirrors.kernel.org/ubuntu/ vivid universe" | sudo tee -a /etc/apt/sources.list
     - sudo apt-get update
     - sudo apt-get install python3-dev
-    - sudo apt-get install cmake/vivid
+    - sudo apt-get install cmake=3.0.2-1ubuntu2
     - cmake --version
 
 before_script:
