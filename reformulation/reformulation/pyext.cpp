@@ -3,6 +3,7 @@
 #include <moduleobject.h>
 
 #include "reformulation.h"
+#include "SemanticNorm.h"
 
 using namespace std;
 
@@ -51,7 +52,7 @@ reformulation_reformulation(PyObject *self, PyObject *args)
   return PyUnicode_FromString(reformulation(req).c_str());
 }
 
-static PyObject *
+/*static PyObject *
 reformulation_testtag(PyObject *self, PyObject *args)
 {
   (void)self;
@@ -62,7 +63,7 @@ reformulation_testtag(PyObject *self, PyObject *args)
   string res=testtag(req);
   //delete entry;
   return PyUnicode_FromString(res.c_str());
-}
+}*/
 
 /*static PyObject *
 reformulation_traincompact(PyObject *self, PyObject *args)
@@ -97,6 +98,17 @@ reformulation_trainword(PyObject *self, PyObject *args)
   return Py_True;
 }*/
 
+static PyObject *
+reformulation_normtest(PyObject *self, PyObject *args)
+{
+  (void)self;
+  if (!PyArg_ParseTuple(args, ""))
+        return NULL;
+  SemanticNorm sn;
+  sn.load("instance.txt");
+  return Py_True;
+}
+
 struct module_state {
     PyObject *error;
 };
@@ -114,10 +126,11 @@ static PyMethodDef reformulation_methods[] = {
     {"save",  reformulation_save, METH_VARARGS,"Saving is important."},
     {"setDelta",  reformulation_setDelta, METH_VARARGS,"Set delta factor for uncompact."},
     {"reformule",  reformulation_reformulation, METH_VARARGS,"Reformulate a request tree."},
-    {"testtag",  reformulation_testtag, METH_VARARGS,"Test tag."},
+   // {"testtag",  reformulation_testtag, METH_VARARGS,"Test tag."},
     //{"trainCompact",  reformulation_traincompact, METH_VARARGS,"Train function Compact"},
     //{"trainUncompact",  reformulation_trainuncompact, METH_VARARGS,"Train function Uncompact"},
     //{"trainWord",  reformulation_trainword, METH_VARARGS,"Train a word placement"},
+    {"normtest",  reformulation_normtest, METH_VARARGS,"Test norm."},
     {NULL, NULL, 0, NULL}
 };
 
