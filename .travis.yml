@@ -6,16 +6,11 @@ compiler:
   - gcc
 
 install:
-    - echo "deb http://mirrors.kernel.org/ubuntu/ vivid universe" | sudo tee -a /etc/apt/sources.list
-    - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
-    - sudo apt-get update
+    - echo "yes" | sudo add-apt-repository ppa:kalakris/cmake
+    - sudo apt-get update -qq
     - sudo apt-get install python3-dev
     - cmake --version
-    - wget http://mirrors.kernel.org/ubuntu/pool/main/d/dpkg/dpkg_1.17.21ubuntu1_amd64.deb
-    - sudo dpkg --force-depends -i dpkg*.deb
-    - wget http://mirrors.kernel.org/ubuntu/pool/main/c/cmake/cmake_3.0.2-1ubuntu2_amd64.deb
-    - wget http://mirrors.kernel.org/ubuntu/pool/main/c/cmake/cmake-data_3.0.2-1ubuntu2_all.deb
-    - sudo dpkg --force-depends -i cmake *.deb
+    - sudo apt-get install cmake
     - cmake --version
 
 before_script:
