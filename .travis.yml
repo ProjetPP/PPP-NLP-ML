@@ -7,6 +7,7 @@ compiler:
 
 install:
     - echo "deb http://mirrors.kernel.org/ubuntu/ vivid universe" | sudo tee -a /etc/apt/sources.list
+    - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
     - sudo apt-get update
     - sudo apt-get install python3-dev
     - sudo apt-get install cmake=3.0.2-1ubuntu2
