@@ -11,6 +11,7 @@
 #include <ctime>
 #include "Transformator.h"
 #include "Trainer.h"
+#include "SemanticNorm.h"
 
 using namespace std;
 
@@ -19,6 +20,8 @@ Dictionary dico;
 Functions functions;
 Transformator transformator(&functions,&dico,0.1f);
 Trainer trainer(&dico,&functions,0.1f);
+SemanticNorm sn;
+
 
 inline bool fileExists (const std::string& name) {
     ifstream f(name.c_str());
@@ -45,6 +48,12 @@ bool init()
     if(!functions.load("functions.txt"))
       return false;
   }
+  if(fileExists("instance.txt"))
+  {
+    sn.load("instance.txt");
+  }
+  else 
+    return false;
   return true;
 }
 
@@ -65,5 +74,7 @@ string reformulation(string input)
   return transformator.reformulation(input);
 }
 
-
-
+unsigned int distance(string s1,string s2)
+{
+  return sn.distance(s1,s2);
+}

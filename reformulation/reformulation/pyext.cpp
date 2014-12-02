@@ -99,14 +99,16 @@ reformulation_trainword(PyObject *self, PyObject *args)
 }*/
 
 static PyObject *
-reformulation_normtest(PyObject *self, PyObject *args)
+reformulation_semnorm(PyObject *self, PyObject *args)
 {
-  (void)self;
-  if (!PyArg_ParseTuple(args, ""))
+ (void)self;
+  const char *entry1;
+  const char *entry2;
+  if (!PyArg_ParseTuple(args, "ss",&entry1,&entry2))
         return NULL;
-  SemanticNorm sn;
-  sn.load("instance.txt");
-  return Py_True;
+  string s1=entry1;
+  string s2=entry2;
+  return PyLong_FromLong(static_cast<long>(distance(s1,s2)));
 }
 
 struct module_state {
@@ -130,7 +132,7 @@ static PyMethodDef reformulation_methods[] = {
     //{"trainCompact",  reformulation_traincompact, METH_VARARGS,"Train function Compact"},
     //{"trainUncompact",  reformulation_trainuncompact, METH_VARARGS,"Train function Uncompact"},
     //{"trainWord",  reformulation_trainword, METH_VARARGS,"Train a word placement"},
-    {"normtest",  reformulation_normtest, METH_VARARGS,"Test norm."},
+    {"norm",  reformulation_semnorm, METH_VARARGS,"Semantic norm."},
     {NULL, NULL, 0, NULL}
 };
 
