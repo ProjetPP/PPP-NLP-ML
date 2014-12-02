@@ -11,7 +11,9 @@ install:
 before_script:
   - cd reformulation
   - wget https://github.com/Attempto/Clex/blob/master/clex_lexicon.pl?raw=true
-  - cmake .
+  - mkdir build
+  - cd build/
+  - cmake ..
 
 script:
   - make reformulation
